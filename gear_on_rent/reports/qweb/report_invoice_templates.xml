@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="action_report_invoice_rental" model="ir.actions.report">
+            <field name="name">Rental Invoice</field>
+            <field name="model">account.move</field>
+            <field name="report_name">account.report_invoice_document</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="is_invoice_report">True</field>
+            <field name="domain">[('move_type', 'in', ['out_invoice', 'out_receipt', 'out_refund']), ('x_billing_category', '=', 'rental')]</field>
+        </record>
+
+        <record id="action_report_invoice_rmc" model="ir.actions.report">
+            <field name="name">RMC Invoice</field>
+            <field name="model">account.move</field>
+            <field name="report_name">account.report_invoice_document</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="is_invoice_report">True</field>
+            <field name="domain">[('move_type', 'in', ['out_invoice', 'out_receipt', 'out_refund']), ('x_billing_category', '=', 'rmc')]</field>
+        </record>
+    </data>
+</odoo>

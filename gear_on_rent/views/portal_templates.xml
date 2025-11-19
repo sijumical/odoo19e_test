@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <template id="portal_gear_on_rent_dashboard" name="My Gear On Rent">
+    <t t-call="portal.portal_layout">
+      <div class="o_portal_wrap">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <h1 class="display-5">My Gear On Rent</h1>
+              <p class="text-muted">
+                Contract dashboard placeholder. Upcoming releases will surface live production and downtime metrics.
+              </p>
+            </div>
+          </div>
+          <div class="row g-3 mt-3">
+            <t t-if="orders">
+              <t t-foreach="orders" t-as="order">
+                <div class="col-md-6">
+                  <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                      <h4 class="card-title" t-esc="order.name"/>
+                      <p class="card-text mb-1">
+                        <strong>Customer:</strong>
+                        <span t-esc="order.partner_id.display_name"/>
+                      </p>
+                      <p class="card-text mb-1">
+                        <strong>Billing Category:</strong>
+                        <span t-esc="order.x_billing_category or '—'"/>
+                      </p>
+                      <p class="card-text">
+                        <strong>MGQ:</strong>
+                        <span t-esc="order.x_monthly_mgq"/> units
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </t>
+            </t>
+            <t t-else="">
+              <div class="col-12">
+                <div class="alert alert-info mb-0">
+                  No Gear On Rent contracts are linked to your account yet.
+                </div>
+              </div>
+            </t>
+          </div>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_user_dropdown_inherit" inherit_id="portal.user_dropdown">
+    <xpath expr="//div[@id='o_logout_divider']" position="before">
+      <a t-attf-href="/my/gear-on-rent" role="menuitem" class="dropdown-item ps-3">
+        <i class="fa fa-fw fa-cogs me-1 small text-primary-emphasis"/> My Gear On Rent
+      </a>
+      <div class="dropdown-divider"/>
+    </xpath>
+  </template>
+</odoo>

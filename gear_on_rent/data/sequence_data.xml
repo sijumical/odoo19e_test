@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data noupdate="1">
+    <record id="seq_gear_ngt_request" model="ir.sequence">
+      <field name="name">Gear NGT Request</field>
+      <field name="code">gear.ngt.request</field>
+      <field name="prefix">NGT/%(year)s/</field>
+      <field name="padding">4</field>
+    </record>
+
+    <record id="seq_gear_loto_request" model="ir.sequence">
+      <field name="name">Gear LOTO Request</field>
+      <field name="code">gear.loto.request</field>
+      <field name="prefix">LOTO/%(year)s/</field>
+      <field name="padding">4</field>
+    </record>
+
+    <record id="seq_gear_rmc_monthly_order" model="ir.sequence">
+      <field name="name">Gear RMC Monthly Work Order</field>
+      <field name="code">gear.rmc.monthly.order</field>
+      <field name="prefix">MWO/%(year)s/</field>
+      <field name="padding">4</field>
+    </record>
+
+    <record id="seq_gear_rmc_docket" model="ir.sequence">
+      <field name="name">Gear RMC Docket</field>
+      <field name="code">gear.rmc.docket</field>
+      <field name="prefix">RMC/DCK/%(year)s/</field>
+      <field name="padding">5</field>
+    </record>
+
+  </data>
+</odoo>

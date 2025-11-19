@@ -1,0 +1,20 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gear_ngt_request_user,Gear NGT Request User,gear_on_rent.model_gear_ngt_request,gear_on_rent.group_gear_on_rent_user,1,1,1,0
+access_gear_ngt_request_manager,Gear NGT Request Manager,gear_on_rent.model_gear_ngt_request,gear_on_rent.group_gear_on_rent_manager,1,1,1,1
+access_gear_ngt_request_portal,Gear NGT Request Portal,gear_on_rent.model_gear_ngt_request,gear_on_rent.group_gear_on_rent_portal,1,0,0,0
+access_gear_loto_request_user,Gear LOTO Request User,gear_on_rent.model_gear_loto_request,gear_on_rent.group_gear_on_rent_user,1,1,1,0
+access_gear_loto_request_manager,Gear LOTO Request Manager,gear_on_rent.model_gear_loto_request,gear_on_rent.group_gear_on_rent_manager,1,1,1,1
+access_gear_loto_request_portal,Gear LOTO Request Portal,gear_on_rent.model_gear_loto_request,gear_on_rent.group_gear_on_rent_portal,1,0,0,0
+access_gear_ngt_ledger_manager,Gear NGT Ledger Manager,gear_on_rent.model_gear_ngt_ledger,gear_on_rent.group_gear_on_rent_manager,1,1,1,0
+access_gear_loto_ledger_manager,Gear LOTO Ledger Manager,gear_on_rent.model_gear_loto_ledger,gear_on_rent.group_gear_on_rent_manager,1,1,1,0
+access_gear_loto_ledger_user,Gear LOTO Ledger User,gear_on_rent.model_gear_loto_ledger,gear_on_rent.group_gear_on_rent_user,1,1,0,0
+access_gear_rmc_docket_user,Gear RMC Docket User,gear_on_rent.model_gear_rmc_docket,gear_on_rent.group_gear_on_rent_user,1,1,1,0
+access_gear_rmc_docket_manager,Gear RMC Docket Manager,gear_on_rent.model_gear_rmc_docket,gear_on_rent.group_gear_on_rent_manager,1,1,1,1
+access_gear_rmc_docket_portal,Gear RMC Docket Portal,gear_on_rent.model_gear_rmc_docket,gear_on_rent.group_gear_on_rent_portal,1,0,0,0
+access_gear_rmc_monthly_order_user,Gear RMC Monthly Order User,gear_on_rent.model_gear_rmc_monthly_order,gear_on_rent.group_gear_on_rent_user,1,1,1,0
+access_gear_rmc_monthly_order_manager,Gear RMC Monthly Order Manager,gear_on_rent.model_gear_rmc_monthly_order,gear_on_rent.group_gear_on_rent_manager,1,1,1,1
+access_gear_rmc_docket_line_user,Gear RMC Docket Line User,gear_on_rent.model_gear_rmc_docket_line,gear_on_rent.group_gear_on_rent_user,1,1,1,0
+access_gear_rmc_docket_line_manager,Gear RMC Docket Line Manager,gear_on_rent.model_gear_rmc_docket_line,gear_on_rent.group_gear_on_rent_manager,1,1,1,1
+access_gear_rmc_docket_batch_user,Gear RMC Docket Batch User,gear_on_rent.model_gear_rmc_docket_batch,gear_on_rent.group_gear_on_rent_user,1,1,1,0
+access_gear_rmc_docket_batch_manager,Gear RMC Docket Batch Manager,gear_on_rent.model_gear_rmc_docket_batch,gear_on_rent.group_gear_on_rent_manager,1,1,1,1
+access_prepare_invoice_wizard_manager,Gear Prepare Invoice Wizard Manager,gear_on_rent.model_gear_prepare_invoice_mrp,gear_on_rent.group_gear_on_rent_manager,1,1,1,0

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="action_report_log_summary" model="ir.actions.report">
+            <field name="name">Gear Log Summary</field>
+            <field name="model">account.move</field>
+            <field name="report_name">gear_on_rent.report_log_summary</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+        </record>
+
+        <template id="report_log_summary">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <h2>Log Summary</h2>
+                        <p>
+                            <strong>Invoice:</strong>
+                            <span t-esc="doc.name"/>
+                        </p>
+                        <p>
+                            <strong>Period:</strong>
+                            <span t-esc="doc.gear_log_period_start"/> ->
+                            <span t-esc="doc.gear_log_period_end"/>
+                        </p>
+
+                        <h3>Rental Performance</h3>
+                        <table class="table table-sm table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>Running Hours</th>
+                                    <td class="text-end" t-esc="doc.gear_log_running_hours"/>
+                                </tr>
+                                <tr>
+                                    <th>Breakdown Hours</th>
+                                    <td class="text-end" t-esc="doc.gear_log_breakdown_hours"/>
+                                </tr>
+                                <tr>
+                                    <th>Standby Hours</th>
+                                    <td class="text-end" t-esc="doc.gear_log_standby_hours"/>
+                                </tr>
+                                <tr>
+                                    <th>Net Billable Hours</th>
+                                    <td class="text-end" t-esc="doc.gear_log_net_hours"/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3>MGQ Summary</h3>
+                        <table class="table table-sm table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>Monthly MGQ Target</th>
+                                    <td class="text-end" t-esc="doc.gear_log_mgq_target"/>
+                                </tr>
+                                <tr>
+                                    <th>Effective MGQ (after relief)</th>
+                                    <td class="text-end" t-esc="doc.gear_log_mgq_effective"/>
+                                </tr>
+                                <tr>
+                                    <th>Unproduced Hours</th>
+                                    <td class="text-end" t-esc="doc.gear_log_unproduced_hours"/>
+                                </tr>
+                                <tr>
+                                    <th>Rate Delta Applied</th>
+                                    <td class="text-end" t-esc="doc.gear_log_unproduced_rate"/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <t t-if="doc.x_billing_category == 'rmc'">
+                            <h3>RMC Production</h3>
+                            <p>
+                                <strong>Total Dockets Quantity:</strong>
+                                <span t-esc="doc.gear_log_rmc_qty"/> m^3
+                            </p>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data noupdate="0">
+    <record id="mail_template_daily_mo_report" model="mail.template">
+      <field name="name">Gear On Rent Daily MO Report</field>
+      <field name="model_id" ref="mrp.model_mrp_production"/>
+      <field name="auto_delete" eval="True"/>
+      <field name="email_from">${(object.x_sale_order_id.company_id.email or object.company_id.email) or ''}</field>
+      <field name="partner_to">${object.x_sale_order_id.partner_invoice_id.id or object.x_sale_order_id.partner_id.id}</field>
+      <field name="subject">Daily MO Report - ${object.display_name}</field>
+      <field name="body_html"><![CDATA[
+<p>Namaste ${object.x_sale_order_id.partner_id.name or 'Customer'},</p>
+<p>Daily report for manufacturing order <strong>${object.display_name}</strong> is ready. Key metrics:</p>
+<ul>
+  <li>Daily Target: ${format_lang(object.x_daily_target_qty or 0.0, digits=2)} m³</li>
+  <li>Adjusted Target: ${format_lang(object.x_adjusted_target_qty or 0.0, digits=2)} m³</li>
+  <li>Prime Output: ${format_lang(object.x_prime_output_qty or 0.0, digits=2)} m³</li>
+  <li>NGT Relief: ${format_lang(object.x_relief_qty or 0.0, digits=2)} m³</li>
+</ul>
+<p>The full PDF report is attached for your reference.</p>
+<p>--<br/>Gear On Rent Automation</p>
+      ]]></field>
+    </record>
+  </data>
+</odoo>

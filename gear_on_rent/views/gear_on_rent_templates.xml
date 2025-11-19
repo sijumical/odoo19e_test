@@ -1,0 +1,1233 @@
+<odoo>
+  <data>
+    <template id="gear_on_rent_assets" name="Gear On Rent Assets">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"/>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css"/>
+      <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"/>
+      <link rel="stylesheet" type="text/css" href="/gear_on_rent/static/src/css/gear_on_rent.css"/>
+      <script type="text/javascript" src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer="defer"/>
+      <script type="text/javascript" src="/gear_on_rent/static/src/js/gear_on_rent.js" defer="defer"/>
+    </template>
+    <template id="gear_on_rent_website_page" name="Gear On Rent Landing Page">
+      <t t-call="website.layout">
+        <t t-set="title">Gear On Rent - IoT-Enabled Construction Equipment | RACH INFRA</t>
+        <t t-set="head">
+          <t t-raw="head"/>
+          <meta name="description" content="Rent modern construction equipment with IoT tracking. Production basis or hourly/daily rates. 50+ machines, pan-India delivery, 98% on-time record."/>
+          <t t-call="gear_on_rent.gear_on_rent_assets"/>
+        </t>
+        <div class="gear-on-rent-page">
+          <section class="hero" id="home">
+            <div class="hero-overlay"></div>
+            <div class="container hero-container">
+              <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+                <div class="hero-badge">
+                  <i class="fas fa-satellite-dish"></i>
+                  <span>IoT-Enabled Equipment Fleet</span>
+                </div>
+                <h1 class="hero-title">
+                  Gear On Rent<br/>
+                  <span class="gradient-text">Smart Construction Equipment</span>
+                </h1>
+                <p class="hero-subtitle">
+                  50+ Modern Machines | Real-Time IoT Tracking | Pan-India Service<br/>
+                  <strong>Production Basis</strong> or <strong>Hourly/Daily Rates</strong> - You Choose!
+                </p>
+                <div class="hero-stats">
+                  <div class="stat-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>98% On-Time Delivery</span>
+                  </div>
+                  <div class="stat-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>100+ Active Projects</span>
+                  </div>
+                  <div class="stat-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>ISO 9001:2015 Certified</span>
+                  </div>
+                </div>
+                <div class="hero-cta">
+                  <a href="#calculator" class="btn btn-primary">
+                    <i class="fas fa-calculator"></i> Calculate Rental Cost
+                  </a>
+                  <a href="#contact" class="btn btn-secondary">
+                    <i class="fas fa-phone-alt"></i> Request Quote
+                  </a>
+                </div>
+                <div class="hero-trust">
+                  <p class="trust-text">Trusted by:</p>
+                  <div class="trust-logos">
+                    <span class="trust-logo">L&amp;T</span>
+                    <span class="trust-logo">Shapoorji Pallonji</span>
+                    <span class="trust-logo">Tata Projects</span>
+                    <span class="trust-logo">DMRC</span>
+                  </div>
+                </div>
+              </div>
+              <div class="hero-image" data-aos="fade-left" data-aos-duration="1000">
+                <div class="equipment-showcase">
+                  <div class="equipment-card floating">
+                    <i class="fas fa-truck-monster"></i>
+                    <p>Excavators</p>
+                  </div>
+                  <div class="equipment-card floating" style="animation-delay: 0.2s;">
+                    <i class="fas fa-hard-hat"></i>
+                    <p>Concrete Mixers</p>
+                  </div>
+                  <div class="equipment-card floating" style="animation-delay: 0.4s;">
+                    <i class="fas fa-helicopter"></i>
+                    <p>Cranes &amp; Hoists</p>
+                  </div>
+                  <div class="equipment-card floating" style="animation-delay: 0.6s;">
+                    <i class="fas fa-network-wired"></i>
+                    <p>IoT Tracked</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="scroll-indicator">
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </section>
+
+          <section class="rental-models" id="rental-models">
+            <div class="container">
+              <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Flexible Rental Options</span>
+                <h2 class="section-title">Choose Your <span class="gradient-text">Rental Model</span></h2>
+                <p class="section-subtitle">We offer two flexible rental models designed to match your project requirements and budget</p>
+              </div>
+
+              <div class="rental-comparison" data-aos="fade-up" data-aos-delay="200">
+                <div class="rental-card production-basis">
+                  <div class="rental-badge">Most Popular</div>
+                  <div class="rental-icon">
+                    <i class="fas fa-industry"></i>
+                  </div>
+                  <h3 class="rental-title">Production Basis</h3>
+                  <p class="rental-description">Perfect for large-scale projects with defined output targets. Pay based on production volume achieved.</p>
+
+                  <div class="rental-features">
+                    <h4><i class="fas fa-star"></i> Ideal For:</h4>
+                    <ul>
+                      <li><i class="fas fa-check"></i> Highway construction projects</li>
+                      <li><i class="fas fa-check"></i> Large residential complexes</li>
+                      <li><i class="fas fa-check"></i> Infrastructure development</li>
+                      <li><i class="fas fa-check"></i> Government contracts</li>
+                    </ul>
+                  </div>
+
+                  <div class="rental-benefits">
+                    <h4><i class="fas fa-gift"></i> Benefits:</h4>
+                    <ul>
+                      <li><i class="fas fa-bolt"></i> Cost-effective for bulk work</li>
+                      <li><i class="fas fa-bolt"></i> Predictable project costs</li>
+                      <li><i class="fas fa-bolt"></i> Dedicated equipment allocation</li>
+                      <li><i class="fas fa-bolt"></i> Priority maintenance support</li>
+                      <li><i class="fas fa-bolt"></i> Long-term rate discounts</li>
+                    </ul>
+                  </div>
+
+                  <div class="rental-pricing">
+                    <div class="price-tag">
+                      <span class="price-label">Starting from</span>
+                      <span class="price-value">₹80/m³</span>
+                      <span class="price-unit">per cubic meter</span>
+                    </div>
+                  </div>
+
+                  <a href="#contact" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i> Get Production Quote
+                  </a>
+                </div>
+
+                <div class="rental-card hourly-basis">
+                  <div class="rental-badge" style="background: linear-gradient(135deg, #1E88E5, #1565C0);">Flexible</div>
+                  <div class="rental-icon">
+                    <i class="fas fa-clock"></i>
+                  </div>
+                  <h3 class="rental-title">Hour/Days Basis</h3>
+                  <p class="rental-description">Maximum flexibility for short-term needs or variable workloads. Pay only for actual usage time.</p>
+
+                  <div class="rental-features">
+                    <h4><i class="fas fa-star"></i> Ideal For:</h4>
+                    <ul>
+                      <li><i class="fas fa-check"></i> Short-term projects</li>
+                      <li><i class="fas fa-check"></i> Emergency repairs</li>
+                      <li><i class="fas fa-check"></i> Seasonal work</li>
+                      <li><i class="fas fa-check"></i> Testing new equipment</li>
+                    </ul>
+                  </div>
+
+                  <div class="rental-benefits">
+                    <h4><i class="fas fa-gift"></i> Benefits:</h4>
+                    <ul>
+                      <li><i class="fas fa-bolt"></i> No long-term commitment</li>
+                      <li><i class="fas fa-bolt"></i> Pay for what you use</li>
+                      <li><i class="fas fa-bolt"></i> Quick deployment (same day)</li>
+                      <li><i class="fas fa-bolt"></i> Easy to scale up/down</li>
+                      <li><i class="fas fa-bolt"></i> Weekly/Monthly packages available</li>
+                    </ul>
+                  </div>
+
+                  <div class="rental-pricing">
+                    <div class="price-tag">
+                      <span class="price-label">Starting from</span>
+                      <span class="price-value">₹800/hr</span>
+                      <span class="price-unit">hourly rate</span>
+                    </div>
+                    <div class="price-options">
+                      <span><i class="fas fa-calendar-day"></i> Daily: From ₹5,000</span>
+                      <span><i class="fas fa-calendar-week"></i> Weekly: From ₹30,000</span>
+                    </div>
+                  </div>
+
+                  <a href="#contact" class="btn btn-secondary">
+                    <i class="fas fa-paper-plane"></i> Get Hourly Quote
+                  </a>
+                </div>
+              </div>
+
+              <div class="comparison-table" data-aos="fade-up" data-aos-delay="400">
+                <h3 class="table-title"><i class="fas fa-balance-scale"></i> Quick Comparison</h3>
+                <div class="table-responsive">
+                  <table class="comparison-grid">
+                    <thead>
+                      <tr>
+                        <th>Feature</th>
+                        <th><i class="fas fa-industry"></i> Production Basis</th>
+                        <th><i class="fas fa-clock"></i> Hour/Days Basis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>Billing Method</strong></td>
+                        <td>Per unit produced (m³, tons, etc.)</td>
+                        <td>Per hour/day used</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Minimum Duration</strong></td>
+                        <td>30 days or project completion</td>
+                        <td>4 hours minimum</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Deployment Time</strong></td>
+                        <td>Within 48-72 hours</td>
+                        <td>Same day (Delhi NCR)</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Maintenance Included</strong></td>
+                        <td><i class="fas fa-check-circle text-success"></i> Yes, full coverage</td>
+                        <td><i class="fas fa-check-circle text-success"></i> Yes, during rental</td>
+                      </tr>
+                      <tr>
+                        <td><strong>IoT Tracking</strong></td>
+                        <td><i class="fas fa-check-circle text-success"></i> Real-time monitoring</td>
+                        <td><i class="fas fa-check-circle text-success"></i> Real-time monitoring</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Operator Included</strong></td>
+                        <td><i class="fas fa-times-circle text-danger"></i> Optional (extra cost)</td>
+                        <td><i class="fas fa-times-circle text-danger"></i> Optional (extra cost)</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Best For Budget</strong></td>
+                        <td>Large projects (₹10L+ value)</td>
+                        <td>Small/medium projects</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Fuel Cost</strong></td>
+                        <td>Client responsibility</td>
+                        <td>Client responsibility</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="technology-features" id="technology">
+            <div class="container">
+              <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Advanced Technology</span>
+                <h2 class="section-title">IoT-Powered <span class="gradient-text">Smart Equipment</span></h2>
+                <p class="section-subtitle">Every machine in our fleet is equipped with cutting-edge IoT sensors for maximum efficiency and transparency</p>
+              </div>
+
+              <div class="tech-features-grid">
+                <div class="tech-feature" data-aos="zoom-in" data-aos-delay="100">
+                  <div class="tech-icon">
+                    <i class="fas fa-map-marked-alt"></i>
+                  </div>
+                  <h3>Real-Time GPS Tracking</h3>
+                  <p>Track your rented equipment&apos;s location 24/7 through our mobile app or web dashboard. Geo-fencing alerts included.</p>
+                  <div class="tech-badge">Live Now</div>
+                </div>
+
+                <div class="tech-feature" data-aos="zoom-in" data-aos-delay="200">
+                  <div class="tech-icon">
+                    <i class="fas fa-heartbeat"></i>
+                  </div>
+                  <h3>Predictive Maintenance</h3>
+                  <p>AI algorithms predict equipment failure 48 hours in advance. Automatic replacement within 4 hours of alert.</p>
+                  <div class="tech-badge">AI-Powered</div>
+                </div>
+
+                <div class="tech-feature" data-aos="zoom-in" data-aos-delay="300">
+                  <div class="tech-icon">
+                    <i class="fas fa-tachometer-alt"></i>
+                  </div>
+                  <h3>Usage Analytics Dashboard</h3>
+                  <p>Monitor fuel consumption, working hours, idle time, and productivity metrics in real-time through your dashboard.</p>
+                  <div class="tech-badge">Data-Driven</div>
+                </div>
+
+                <div class="tech-feature" data-aos="zoom-in" data-aos-delay="400">
+                  <div class="tech-icon">
+                    <i class="fas fa-bell"></i>
+                  </div>
+                  <h3>Instant Alerts &amp; Notifications</h3>
+                  <p>Get SMS/WhatsApp alerts for maintenance schedules, usage milestones, and critical equipment issues.</p>
+                  <div class="tech-badge">24/7 Monitoring</div>
+                </div>
+
+                <div class="tech-feature" data-aos="zoom-in" data-aos-delay="500">
+                  <div class="tech-icon">
+                    <i class="fas fa-thermometer-half"></i>
+                  </div>
+                  <h3>Smart Sensors Network</h3>
+                  <p>Temperature, vibration, pressure, and load sensors ensure optimal performance and prevent equipment damage.</p>
+                  <div class="tech-badge">IoT Enabled</div>
+                </div>
+
+                <div class="tech-feature" data-aos="zoom-in" data-aos-delay="600">
+                  <div class="tech-icon">
+                    <i class="fas fa-shield-alt"></i>
+                  </div>
+                  <h3>Safety Monitoring System</h3>
+                  <p>Automatic shutdown on overload detection, tilt sensors for crane safety, and operator behavior monitoring.</p>
+                  <div class="tech-badge">Safety First</div>
+                </div>
+              </div>
+
+              <div class="iot-dashboard-preview" data-aos="fade-up" data-aos-delay="700">
+                <h3><i class="fas fa-desktop"></i> Live Equipment Monitoring Dashboard</h3>
+                <div class="dashboard-mockup">
+                  <div class="dashboard-header">
+                    <div class="dashboard-title">
+                      <i class="fas fa-chart-line"></i> Equipment Fleet Status
+                    </div>
+                    <div class="dashboard-time">
+                      <i class="fas fa-circle pulse-dot"></i> Live Updates
+                    </div>
+                  </div>
+                  <div class="dashboard-stats">
+                    <div class="dashboard-stat">
+                      <div class="stat-icon green">
+                        <i class="fas fa-check-circle"></i>
+                      </div>
+                      <div class="stat-info">
+                        <span class="stat-label">Active Equipment</span>
+                        <span class="stat-number">42</span>
+                      </div>
+                    </div>
+                    <div class="dashboard-stat">
+                      <div class="stat-icon orange">
+                        <i class="fas fa-wrench"></i>
+                      </div>
+                      <div class="stat-info">
+                        <span class="stat-label">Under Maintenance</span>
+                        <span class="stat-number">3</span>
+                      </div>
+                    </div>
+                    <div class="dashboard-stat">
+                      <div class="stat-icon blue">
+                        <i class="fas fa-warehouse"></i>
+                      </div>
+                      <div class="stat-info">
+                        <span class="stat-label">Available Now</span>
+                        <span class="stat-number">18</span>
+                      </div>
+                    </div>
+                    <div class="dashboard-stat">
+                      <div class="stat-icon purple">
+                        <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                          <span class="stat-label">Total Hours Today</span>
+                          <span class="stat-number">1,247</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="dashboard-map">
+                      <div class="map-placeholder">
+                        <i class="fas fa-map-marker-alt map-marker" style="top: 30%; left: 40%;"></i>
+                        <i class="fas fa-map-marker-alt map-marker" style="top: 50%; left: 60%;"></i>
+                        <i class="fas fa-map-marker-alt map-marker" style="top: 70%; left: 35%;"></i>
+                        <i class="fas fa-map-marker-alt map-marker" style="top: 45%; left: 75%;"></i>
+                        <div class="map-label">Live Equipment Locations</div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="calculator-section" id="calculator">
+            <div class="container">
+              <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Cost Estimator</span>
+                <h2 class="section-title">Rental <span class="gradient-text">Cost Calculator</span></h2>
+                <p class="section-subtitle">Get instant cost estimates for your equipment rental needs</p>
+              </div>
+
+              <div class="calculator-container" data-aos="fade-up" data-aos-delay="200">
+                <div class="calculator-form">
+                  <h3><i class="fas fa-calculator"></i> Calculate Your Rental Cost</h3>
+
+                  <div class="form-group">
+                    <label for="rentalType"><i class="fas fa-hand-pointer"></i> Select Rental Type</label>
+                    <select id="rentalType" class="form-control">
+                      <option value="">-- Choose Rental Model --</option>
+                      <option value="hourly">Hour/Days Basis</option>
+                      <option value="production">Production Basis</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="equipmentType"><i class="fas fa-tools"></i> Equipment Type</label>
+                    <t t-set="has_public_category" t-value="'product.public.category' in request.env.registry.models"/>
+                    <t t-set="gear_on_rent_category" t-value="has_public_category and request.env['product.public.category'].sudo().search([('name', '=', 'rental')], limit=1)"/>
+                    <t t-set="gear_on_rent_products" t-value="gear_on_rent_category and request.env['product.template'].sudo().search([('website_published', '=', True), ('sale_ok', '=', True), ('public_categ_ids', 'child_of', gear_on_rent_category.ids)], order='name') or request.env['product.template'].sudo().browse([])"/>
+                    <select id="equipmentType" class="form-control">
+                      <option value="">-- Select Equipment --</option>
+                      <t t-if="gear_on_rent_products">
+                        <t t-foreach="gear_on_rent_products" t-as="product">
+                          <t t-set="variant" t-value="product.product_variant_id"/>
+                          <t t-set="hourly_price" t-value="(product._fields.get('x_hourly_rate') and product.x_hourly_rate) or (product._fields.get('x_hourly_price') and product.x_hourly_price) or product.list_price"/>
+                          <t t-set="daily_price" t-value="(product._fields.get('x_daily_rate') and product.x_daily_rate) or (product._fields.get('x_daily_price') and product.x_daily_price) or hourly_price"/>
+                          <t t-set="production_price" t-value="(product._fields.get('x_production_rate') and product.x_production_rate) or (product._fields.get('x_production_price') and product.x_production_price) or product.list_price"/>
+                          <option t-att-value="variant.id"
+                                  t-att-data-hourly="hourly_price"
+                                  t-att-data-daily="daily_price"
+                                  t-att-data-production="production_price">
+                            <t t-esc="product.display_name"/>
+                          </option>
+                        </t>
+                      </t>
+                      <t t-else="">
+                        <option value="" disabled="disabled">Configure Gear On Rent products to unlock calculator</option>
+                      </t>
+                    </select>
+                  </div>
+
+                  <div id="hourlyOptions" class="duration-options" style="display: none;">
+                    <div class="form-group">
+                      <label for="durationType"><i class="fas fa-calendar-alt"></i> Duration Type</label>
+                      <select id="durationType" class="form-control">
+                        <option value="hourly">Hourly</option>
+                        <option value="daily">Daily</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="duration"><i class="fas fa-clock"></i> Duration</label>
+                      <input type="number" id="duration" class="form-control" min="1" placeholder="Enter number of hours/days"/>
+                    </div>
+                  </div>
+
+                  <div id="productionOptions" class="duration-options" style="display: none;">
+                    <div class="form-group">
+                      <label for="productionVolume"><i class="fas fa-cubes"></i> Production Volume (m³)</label>
+                      <input type="number" id="productionVolume" class="form-control" min="1" placeholder="Enter cubic meters"/>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="projectDuration"><i class="fas fa-calendar-week"></i> Project Duration (days)</label>
+                      <input type="number" id="projectDuration" class="form-control" min="1" placeholder="Estimated project days"/>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>
+                      <input type="checkbox" id="includeOperator"/>
+                      Include Operator (+₹500/hour or ₹3,500/day)
+                    </label>
+                  </div>
+
+                  <div class="form-group">
+                    <label>
+                      <input type="checkbox" id="includeMaintenance"/>
+                      Premium Maintenance Package (+10% of total)
+                    </label>
+                  </div>
+
+                  <button type="button" class="btn btn-primary btn-calculate" onclick="calculateRental()">
+                    <i class="fas fa-calculator"></i> Calculate Cost
+                  </button>
+                </div>
+
+                <div class="calculator-result" id="calculatorResult">
+                  <div class="result-placeholder">
+                    <i class="fas fa-calculator"></i>
+                    <p>Fill in the details and click &quot;Calculate Cost&quot; to see your estimate</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="calculator-note" data-aos="fade-up" data-aos-delay="400">
+                <i class="fas fa-info-circle"></i>
+                <p><strong>Note:</strong> These are estimated costs. Final pricing may vary based on equipment availability, location, and additional services. GST will be added as per applicable rates. For accurate quotes, please <a href="#contact">contact our team</a> or call <strong>+91 92893 75999</strong>.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="equipment-fleet" id="equipment">
+            <div class="container">
+              <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Our Fleet</span>
+                <h2 class="section-title">50+ Modern <span class="gradient-text">Construction Equipment</span></h2>
+                <p class="section-subtitle">State-of-the-art machinery for every construction need</p>
+              </div>
+
+              <div class="equipment-categories">
+                <div class="equipment-category" data-aos="fade-up" data-aos-delay="100">
+                  <div class="category-header">
+                    <div class="category-icon">
+                      <i class="fas fa-truck-monster"></i>
+                    </div>
+                    <div class="category-info">
+                      <h3>Excavators &amp; Loaders</h3>
+                      <span class="category-count">12 Units Available</span>
+                    </div>
+                  </div>
+                  <div class="category-items">
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        20T Hydraulic Excavator
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Mini Excavator (5T)
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Wheel Loader (3m³)
+                      </div>
+                      <div class="item-status rented">
+                        <i class="fas fa-circle"></i> Rented
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Backhoe Loader
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="equipment-category" data-aos="fade-up" data-aos-delay="200">
+                  <div class="category-header">
+                    <div class="category-icon">
+                      <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <div class="category-info">
+                      <h3>Concrete Equipment</h3>
+                      <span class="category-count">8 Units Available</span>
+                    </div>
+                  </div>
+                  <div class="category-items">
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Concrete Mixer (500L)
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Concrete Pump (90m)
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Transit Mixer (6m³)
+                      </div>
+                      <div class="item-status maintenance">
+                        <i class="fas fa-circle"></i> Maintenance
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Vibrator &amp; Screed
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="equipment-category" data-aos="fade-up" data-aos-delay="300">
+                  <div class="category-header">
+                    <div class="category-icon">
+                      <i class="fas fa-helicopter"></i>
+                    </div>
+                    <div class="category-info">
+                      <h3>Cranes &amp; Lifting</h3>
+                      <span class="category-count">10 Units Available</span>
+                    </div>
+                  </div>
+                  <div class="category-items">
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Mobile Crane (25T)
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Tower Crane (50T)
+                      </div>
+                      <div class="item-status rented">
+                        <i class="fas fa-circle"></i> Rented
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Crawler Crane (40T)
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Telescopic Handler
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="equipment-category" data-aos="fade-up" data-aos-delay="400">
+                  <div class="category-header">
+                    <div class="category-icon">
+                      <i class="fas fa-road"></i>
+                    </div>
+                    <div class="category-info">
+                      <h3>Compaction &amp; Road Equipment</h3>
+                      <span class="category-count">9 Units Available</span>
+                    </div>
+                  </div>
+                  <div class="category-items">
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Road Roller (10T)
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Vibratory Compactor
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Plate Compactor
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Tandem Roller
+                      </div>
+                      <div class="item-status rented">
+                        <i class="fas fa-circle"></i> Rented
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="equipment-category" data-aos="fade-up" data-aos-delay="500">
+                  <div class="category-header">
+                    <div class="category-icon">
+                      <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="category-info">
+                      <h3>Power &amp; Support Equipment</h3>
+                      <span class="category-count">11 Units Available</span>
+                    </div>
+                  </div>
+                  <div class="category-items">
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Generator (125 KVA)
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Forklift (3T)
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Water Pump (High Capacity)
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                    <div class="equipment-item">
+                      <div class="item-name">
+                        <i class="fas fa-check-circle"></i>
+                        Welding Machine
+                      </div>
+                      <div class="item-status available">
+                        <i class="fas fa-circle"></i> Available
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fleet-cta" data-aos="fade-up" data-aos-delay="600">
+                <p>Need equipment not listed here? We can source it for you!</p>
+                <a href="#contact" class="btn btn-primary">
+                  <i class="fas fa-comment-dots"></i> Request Custom Equipment
+                </a>
+                <a href="javascript:void(0)" class="btn btn-secondary" onclick="downloadRateCard(); return false;">
+                  <i class="fas fa-download"></i> Download Rate Card
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <section class="why-choose" id="why-choose">
+            <div class="container">
+              <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Our Advantages</span>
+                <h2 class="section-title">Why Choose <span class="gradient-text">RACH INFRA GearOnRent</span></h2>
+                <p class="section-subtitle">Industry-leading service with proven track record</p>
+              </div>
+
+              <div class="why-grid">
+                <div class="why-item" data-aos="flip-left" data-aos-delay="100">
+                  <div class="why-number">01</div>
+                  <div class="why-icon">
+                    <i class="fas fa-map-marked-alt"></i>
+                  </div>
+                  <h3>Pan-India Coverage</h3>
+                  <p>Service across 15+ states with owned plants and 12 certified vendor partners. Same-day delivery in Delhi NCR, &lt;72 hour dispatch nationwide.</p>
+                </div>
+
+                <div class="why-item" data-aos="flip-left" data-aos-delay="200">
+                  <div class="why-number">02</div>
+                  <div class="why-icon">
+                    <i class="fas fa-shipping-fast"></i>
+                  </div>
+                  <h3>98% On-Time Delivery</h3>
+                  <p>Industry-best delivery record with GPS tracking for full transparency. Our 2023 performance: 98.4% on-time deliveries across 1,000+ projects.</p>
+                </div>
+
+                <div class="why-item" data-aos="flip-left" data-aos-delay="300">
+                  <div class="why-number">03</div>
+                  <div class="why-icon">
+                    <i class="fas fa-network-wired"></i>
+                  </div>
+                  <h3>IoT Tracking Standard</h3>
+                  <p>All equipment comes with real-time tracking, usage analytics, and predictive maintenance alerts. You stay in control, always.</p>
+                </div>
+
+                <div class="why-item" data-aos="flip-left" data-aos-delay="400">
+                  <div class="why-number">04</div>
+                  <div class="why-icon">
+                    <i class="fas fa-tools"></i>
+                  </div>
+                  <h3>Maintenance Included</h3>
+                  <p>Full maintenance coverage during rental period. Equipment breakdown? We replace it within 4 hours or your rental is free for that day.</p>
+                </div>
+
+                <div class="why-item" data-aos="flip-left" data-aos-delay="500">
+                  <div class="why-number">05</div>
+                  <div class="why-icon">
+                    <i class="fas fa-certificate"></i>
+                  </div>
+                  <h3>ISO 9001:2015 Certified</h3>
+                  <p>Quality assurance with NABL accredited testing and blockchain-based material traceability. Trusted by L&amp;T, Shapoorji Pallonji, Tata Projects.</p>
+                </div>
+
+                <div class="why-item" data-aos="flip-left" data-aos-delay="600">
+                  <div class="why-number">06</div>
+                  <div class="why-icon">
+                    <i class="fas fa-rupee-sign"></i>
+                  </div>
+                  <h3>Transparent Pricing</h3>
+                  <p>No hidden charges. Quotes include GST, delivery, and 30-day support. Price match guarantee - we&apos;ll beat competitors by 2%.</p>
+                </div>
+              </div>
+
+              <div class="trust-badges" data-aos="fade-up" data-aos-delay="700">
+                <div class="trust-badge-item">
+                  <i class="fas fa-award"></i>
+                  <div class="badge-info">
+                    <strong>100+</strong>
+                    <span>Active Projects Monthly</span>
+                  </div>
+                </div>
+                <div class="trust-badge-item">
+                  <i class="fas fa-trophy"></i>
+                  <div class="badge-info">
+                    <strong>85%</strong>
+                    <span>Client Retention Since 2020</span>
+                  </div>
+                </div>
+                <div class="trust-badge-item">
+                  <i class="fas fa-leaf"></i>
+                  <div class="badge-info">
+                    <strong>30%</strong>
+                    <span>Carbon Footprint Reduction</span>
+                  </div>
+                </div>
+                <div class="trust-badge-item">
+                  <i class="fas fa-users"></i>
+                  <div class="badge-info">
+                    <strong>₹100Cr+</strong>
+                    <span>Annual Revenue</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="testimonials" id="testimonials">
+            <div class="container">
+              <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Client Success Stories</span>
+                <h2 class="section-title">Trusted by <span class="gradient-text">Industry Leaders</span></h2>
+                <p class="section-subtitle">Real feedback from real clients who chose RACH INFRA</p>
+              </div>
+
+              <div class="testimonials-grid">
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                  <div class="testimonial-header">
+                    <div class="testimonial-avatar">
+                      <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="testimonial-author">
+                      <h4>Anil Yadav</h4>
+                      <p>Project Head, DMRC (Delhi Metro)</p>
+                    </div>
+                    <div class="testimonial-rating">
+                      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                  <div class="testimonial-content">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p>&quot;Their IoT equipment saved us from a ₹5L loss. We rented a concrete mixer for a 15-day highway project. The IoT system alerted us about overheating 2 days before a breakdown. Their team replaced it within 4 hours. Reliability we&apos;ve never seen elsewhere!&quot;</p>
+                  </div>
+                  <div class="testimonial-project">
+                    <i class="fas fa-briefcase"></i> Metro Line Extension Project
+                  </div>
+                </div>
+
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                  <div class="testimonial-header">
+                    <div class="testimonial-avatar">
+                      <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="testimonial-author">
+                      <h4>Priya Mehta</h4>
+                      <p>Architect, GreenSpace Builders, Gurgaon</p>
+                    </div>
+                    <div class="testimonial-rating">
+                      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                  <div class="testimonial-content">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p>&quot;We hesitated to rent heavy equipment initially, but their team trained our operators onsite. The excavators were well-maintained, and the real-time tracking gave us complete peace of mind. 20% faster project completion with zero equipment downtime.&quot;</p>
+                  </div>
+                  <div class="testimonial-project">
+                    <i class="fas fa-briefcase"></i> Luxury Residential Complex
+                  </div>
+                </div>
+
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                  <div class="testimonial-header">
+                    <div class="testimonial-avatar">
+                      <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="testimonial-author">
+                      <h4>Rajesh Verma</h4>
+                      <p>Contractor, Noida</p>
+                    </div>
+                    <div class="testimonial-rating">
+                      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                  <div class="testimonial-content">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p>&quot;The production-basis rental model saved us ₹3.2L on our apartment project. Their calculator gave us precise requirements, and flexible payment terms helped our cash flow. Professional service from quote to delivery!&quot;</p>
+                  </div>
+                  <div class="testimonial-project">
+                    <i class="fas fa-briefcase"></i> Apartment Construction, Noida
+                  </div>
+                </div>
+
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="400">
+                  <div class="testimonial-header">
+                    <div class="testimonial-avatar">
+                      <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="testimonial-author">
+                      <h4>Operations Lead</h4>
+                      <p>NCR Buildtech, Skyline Infra</p>
+                    </div>
+                    <div class="testimonial-rating">
+                      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                  <div class="testimonial-content">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p>&quot;Thanks to RACH INFRA&apos;s fast deployment model, we saved 20% in manpower costs on our Gurgaon high-rise project. Same-day delivery in NCR is a game-changer. The IoT dashboard helps us optimize equipment usage across multiple sites.&quot;</p>
+                  </div>
+                  <div class="testimonial-project">
+                    <i class="fas fa-briefcase"></i> Commercial High-Rise, Gurgaon
+                  </div>
+                </div>
+
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="500">
+                  <div class="testimonial-header">
+                    <div class="testimonial-avatar">
+                      <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="testimonial-author">
+                      <h4>Site Manager</h4>
+                      <p>Infrastructure Project, Faridabad</p>
+                    </div>
+                    <div class="testimonial-rating">
+                      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                  <div class="testimonial-content">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p>&quot;Finally, a supplier that answers calls after 7 PM! Their 24/7 escalation desk saved us during an emergency crane requirement. Equipment arrived within 6 hours on a Sunday. That&apos;s commitment to client service!&quot;</p>
+                  </div>
+                  <div class="testimonial-project">
+                    <i class="fas fa-briefcase"></i> Highway Construction
+                  </div>
+                </div>
+
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="600">
+                  <div class="testimonial-header">
+                    <div class="testimonial-avatar">
+                      <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="testimonial-author">
+                      <h4>Contractor</h4>
+                      <p>Residential Projects, Lucknow</p>
+                    </div>
+                    <div class="testimonial-rating">
+                      <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                  </div>
+                  <div class="testimonial-content">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p>&quot;Their equipment is well-maintained and operators were trained directly by RACH INFRA. The hourly rental model gave us flexibility for short-term needs. Seamless experience from booking to return!&quot;</p>
+                  </div>
+                  <div class="testimonial-project">
+                    <i class="fas fa-briefcase"></i> Multiple Residential Sites
+                  </div>
+                </div>
+              </div>
+
+              <div class="client-logos" data-aos="fade-up" data-aos-delay="700">
+                <h3>Trusted by India&apos;s Leading Construction Companies</h3>
+                <div class="logos-marquee">
+                  <div class="logo-item">L&amp;T</div>
+                  <div class="logo-item">Shapoorji Pallonji</div>
+                  <div class="logo-item">Tata Projects</div>
+                  <div class="logo-item">DMRC</div>
+                  <div class="logo-item">DLF</div>
+                  <div class="logo-item">Godrej Properties</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="contact-section" id="contact">
+            <div class="container">
+              <div class="section-header" data-aos="fade-up">
+                <span class="section-badge">Get Started</span>
+                <h2 class="section-title">Request a <span class="gradient-text">Free Quote</span></h2>
+                <p class="section-subtitle">Fill in your details and our team will contact you within 4 hours with a customized quote</p>
+              </div>
+
+              <div class="contact-container">
+                <div class="contact-form-wrapper" data-aos="fade-right" data-aos-delay="200">
+                  <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label for="fullName"><i class="fas fa-user"></i> Full Name *</label>
+                        <input type="text" id="fullName" class="form-control" placeholder="Enter your name" required="required"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="companyName"><i class="fas fa-building"></i> Company Name *</label>
+                        <input type="text" id="companyName" class="form-control" placeholder="Your company" required="required"/>
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email Address *</label>
+                        <input type="email" id="email" class="form-control" placeholder="your@email.com" required="required"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="phone"><i class="fas fa-phone"></i> Phone Number *</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="+91 XXXXX XXXXX" required="required"/>
+                      </div>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label for="projectLocation"><i class="fas fa-map-marker-alt"></i> Project Location *</label>
+                        <input type="text" id="projectLocation" class="form-control" placeholder="City, State" required="required"/>
+                      </div>
+                      <div class="form-group">
+                        <label for="projectType"><i class="fas fa-hard-hat"></i> Project Type</label>
+                        <select id="projectType" class="form-control">
+                          <option value="">Select project type</option>
+                          <option value="residential">Residential Building</option>
+                          <option value="commercial">Commercial Complex</option>
+                          <option value="infrastructure">Infrastructure/Roads</option>
+                          <option value="industrial">Industrial Project</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="equipmentNeeded"><i class="fas fa-tools"></i> Equipment Needed</label>
+                      <input type="text" id="equipmentNeeded" class="form-control" placeholder="E.g., Excavator, Concrete Mixer, Crane"/>
+                    </div>
+
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label for="rentalModel"><i class="fas fa-calendar-check"></i> Preferred Rental Model</label>
+                        <select id="rentalModel" class="form-control">
+                          <option value="">Select model</option>
+                          <option value="hourly">Hour/Days Basis</option>
+                          <option value="production">Production Basis</option>
+                          <option value="not-sure">Not Sure - Need Consultation</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="startDate"><i class="fas fa-calendar"></i> Estimated Start Date</label>
+                        <input type="date" id="startDate" class="form-control"/>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="message"><i class="fas fa-comment-dots"></i> Additional Details</label>
+                      <textarea id="message" class="form-control" rows="4" placeholder="Tell us more about your requirements..."></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                      <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-paper-plane"></i> Submit Request
+                      </button>
+                      <a href="https://wa.me/919289375999?text=Hi,%20I%20need%20equipment%20rental%20information" class="btn btn-whatsapp-large" target="_blank">
+                        <i class="fab fa-whatsapp"></i> WhatsApp Us
+                      </a>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="contact-info-wrapper" data-aos="fade-left" data-aos-delay="200">
+                  <div class="contact-info-card">
+                    <h3><i class="fas fa-headset"></i> Contact Information</h3>
+
+                    <div class="info-item">
+                      <div class="info-icon">
+                        <i class="fas fa-phone-alt"></i>
+                      </div>
+                      <div class="info-content">
+                        <h4>Call CEO Directly</h4>
+                        <a href="tel:+919289375999">+91 92893 75999</a>
+                        <p>24/7 Escalation Desk - Neetu Rani (CEO)</p>
+                      </div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-icon">
+                        <i class="fas fa-envelope"></i>
+                      </div>
+                      <div class="info-content">
+                        <h4>Email Us</h4>
+                        <a href="mailto:gearonrent@rachinfra.com">gearonrent@rachinfra.com</a>
+                        <p>Response within 4 hours</p>
+                      </div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-icon">
+                        <i class="fas fa-globe"></i>
+                      </div>
+                      <div class="info-content">
+                        <h4>Visit Website</h4>
+                        <a href="https://rachinfra.com" target="_blank">www.rachinfra.com</a>
+                        <p>Complete equipment catalog online</p>
+                      </div>
+                    </div>
+
+                    <div class="info-item">
+                      <div class="info-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                      </div>
+                      <div class="info-content">
+                        <h4>Head Office</h4>
+                        <p>RACH INFRA PVT. LTD.<br/>Haryana, India</p>
+                      </div>
+                    </div>
+
+                    <div class="business-hours">
+                      <h4><i class="fas fa-clock"></i> Business Hours</h4>
+                      <p><strong>Mon - Sat:</strong> 8:00 AM - 8:00 PM</p>
+                      <p><strong>Sunday:</strong> 10:00 AM - 6:00 PM</p>
+                      <p class="highlight"><i class="fas fa-exclamation-circle"></i> Emergency support available 24/7</p>
+                    </div>
+
+                    <div class="quick-links">
+                      <h4><i class="fas fa-link"></i> Quick Actions</h4>
+                      <a href="#calculator" class="quick-link-btn">
+                        <i class="fas fa-calculator"></i> Cost Calculator
+                      </a>
+                      <a href="javascript:void(0)" onclick="downloadRateCard(); return false;" class="quick-link-btn">
+                        <i class="fas fa-file-download"></i> Download Rate Card
+                      </a>
+                      <a href="#equipment" class="quick-link-btn">
+                        <i class="fas fa-list"></i> View Equipment Fleet
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="floating-actions">
+            <a href="https://wa.me/919289375999?text=Hi,%20I%20need%20equipment%20rental%20information" class="floating-btn whatsapp-float" target="_blank" title="Chat on WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="tel:+919289375999" class="floating-btn call-float" title="Call CEO">
+              <i class="fas fa-phone-alt"></i>
+            </a>
+            <a href="#calculator" class="floating-btn calculator-float" title="Cost Calculator">
+              <i class="fas fa-calculator"></i>
+            </a>
+          </div>
+
+          <button class="scroll-to-top" id="scrollToTop">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+        </div>
+
+      </t>
+    </template>
+    <template id="quote_request_success" name="Gear On Rent Quote Success">
+      <t t-call="website.layout">
+        <t t-set="title">Rental Quote Created | Gear On Rent</t>
+        <section class="py-5" style="background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(30, 136, 229, 0.05));">
+          <div class="container">
+            <div class="text-center mb-4">
+              <h1 class="display-5 fw-bold">Rental Quote Created</h1>
+              <p class="lead">We saved your estimator output as a draft quotation.</p>
+            </div>
+            <div class="card shadow border-0 mx-auto" style="max-width: 640px;">
+              <div class="card-body p-4">
+                <h2 class="h4 mb-3"><i class="fas fa-file-contract text-primary me-2"></i><t t-esc="order.name"/></h2>
+                <p class="mb-2"><strong>Equipment:</strong> <span class="text-muted" t-esc="equipment"/></p>
+                <p class="mb-3"><strong>Estimated Amount:</strong> <span class="text-muted" t-esc="amount_display"/></p>
+                <t t-if="start_date">
+                  <p class="mb-2 text-muted">
+                    <strong>Rental Window:</strong>
+                    <span t-esc="start_date"/> -&gt; <span t-esc="return_date"/>
+                  </p>
+                </t>
+                <t t-if="details">
+                  <div class="mb-4">
+                    <strong>Estimator Details</strong>
+                    <p class="text-muted" t-esc="details"/>
+                  </div>
+                </t>
+                <p class="mb-4 text-muted">Open the quotation in the Rental application to adjust rates, add timeline items, or send it to the client.</p>
+                <div class="d-flex flex-column flex-sm-row gap-3">
+                  <a t-att-href="'/web#id=%s&amp;model=sale.order&amp;view_type=form' % order.id" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-external-link-alt me-2"></i>Open in Rental App
+                  </a>
+                  <a href="/gear-on-rent" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Estimator
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </t>
+    </template>
+  </data>
+</odoo>

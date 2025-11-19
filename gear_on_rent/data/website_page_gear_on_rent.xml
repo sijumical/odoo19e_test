@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <record id="gear_on_rent_landing_page" model="website.page">
+      <field name="name">Gear On Rent</field>
+      <field name="url">/gear-on-rent</field>
+      <field name="view_id" ref="gear_on_rent.gear_on_rent_website_page"/>
+      <field name="website_published">True</field>
+    </record>
+
+    <record id="gear_on_rent_menu" model="website.menu">
+      <field name="name">Gear On Rent</field>
+      <field name="parent_id" ref="website.main_menu"/>
+      <field name="url">/gear-on-rent</field>
+      <field name="sequence">46</field>
+    </record>
+  </data>
+</odoo>

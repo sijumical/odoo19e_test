@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_prepare_invoice_from_mrp_form" model="ir.ui.view">
+        <field name="name">gear.prepare.invoice.mrp.form</field>
+        <field name="model">gear.prepare.invoice.mrp</field>
+        <field name="arch" type="xml">
+            <form string="Prepare Gear On Rent Invoice">
+                <group>
+                    <group>
+                        <field name="monthly_order_id"/>
+                        <field name="so_id" readonly="1"/>
+                        <field name="invoice_date"/>
+                    </group>
+                    <group>
+                        <field name="x_unproduced_delta"/>
+                        <field name="prime_output_qty" readonly="1"/>
+                        <field name="optimized_standby_qty" readonly="1"/>
+                        <field name="adjusted_target_qty" readonly="1"/>
+                       <field name="downtime_relief_qty" readonly="1"/>
+                        <field name="loto_chargeable_hours" readonly="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_prepare_invoice" type="object" string="Prepare Invoice" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_prepare_invoice_from_mrp" model="ir.actions.act_window">
+        <field name="name">Prepare Invoice</field>
+        <field name="res_model">gear.prepare.invoice.mrp</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_gear_prepare_invoice"
+              name="Prepare Invoice"
+              parent="menu_gear_on_rent_operations"
+              action="gear_on_rent.action_prepare_invoice_from_mrp"
+              sequence="30"/>
+</odoo>

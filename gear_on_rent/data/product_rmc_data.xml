@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data noupdate="1">
+    <record id="product_attribute_operational_mode" model="product.attribute">
+      <field name="name">Operational Mode</field>
+      <field name="create_variant">always</field>
+    </record>
+
+    <record id="product_attribute_value_operational_mode_prime" model="product.attribute.value">
+      <field name="name">Prime Output Production</field>
+      <field name="attribute_id" ref="gear_on_rent.product_attribute_operational_mode"/>
+    </record>
+    <record id="product_attribute_value_operational_mode_standby" model="product.attribute.value">
+      <field name="name">Optimized Standby Operations</field>
+      <field name="attribute_id" ref="gear_on_rent.product_attribute_operational_mode"/>
+    </record>
+    <record id="product_attribute_value_operational_mode_ngt" model="product.attribute.value">
+      <field name="name">No-Generation Time (NGT) Period</field>
+      <field name="attribute_id" ref="gear_on_rent.product_attribute_operational_mode"/>
+    </record>
+
+    <record id="product_template_rmc_mixing_production" model="product.template">
+      <field name="name">RMC Mixing &amp; Production</field>
+      <field name="type">service</field>
+      <field name="sale_ok">True</field>
+      <field name="purchase_ok">False</field>
+      <field name="list_price">0.0</field>
+      <field name="attribute_line_ids" eval="[(0, 0, {
+        'attribute_id': ref('gear_on_rent.product_attribute_operational_mode'),
+        'value_ids': [(6, 0, [
+          ref('gear_on_rent.product_attribute_value_operational_mode_prime'),
+          ref('gear_on_rent.product_attribute_value_operational_mode_standby'),
+          ref('gear_on_rent.product_attribute_value_operational_mode_ngt'),
+        ])],
+      })]"/>
+    </record>
+  </data>
+</odoo>

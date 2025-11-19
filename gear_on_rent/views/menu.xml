@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_gear_on_rent_root"
+              name="Gear On Rent"
+              sequence="25"
+              web_icon="gear_on_rent,static/description/icon.png"/>
+
+    <menuitem id="menu_gear_on_rent_operations"
+              name="Operations"
+              parent="menu_gear_on_rent_root"
+              sequence="10"/>
+
+    <menuitem id="menu_gear_rmc_monthly_orders"
+              name="Monthly Work Orders"
+              parent="menu_gear_on_rent_operations"
+              action="gear_on_rent.action_rmc_monthly_order"
+              sequence="5"/>
+
+    <menuitem id="menu_gear_on_rent_compliance"
+              name="Downtime Requests"
+              parent="menu_gear_on_rent_root"
+              sequence="20"/>
+
+    <record id="menu_gear_on_rent_root" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [])]"/>
+    </record>
+    <record id="menu_gear_on_rent_operations" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [])]"/>
+    </record>
+    <record id="menu_gear_on_rent_compliance" model="ir.ui.menu">
+        <field name="group_ids" eval="[(6, 0, [])]"/>
+    </record>
+
+    <menuitem id="menu_gear_rmc_logs"
+              name="RMC Dockets"
+              parent="menu_gear_on_rent_operations"
+              action="gear_on_rent.action_gear_rmc_production_log"
+              sequence="10"/>
+
+    <menuitem id="menu_gear_ngt_requests"
+              name="NGT Requests"
+              parent="menu_gear_on_rent_compliance"
+              action="gear_on_rent.action_gear_ngt_request"
+              sequence="10"/>
+
+    <menuitem id="menu_gear_loto_requests"
+              name="LOTO Requests"
+              parent="menu_gear_on_rent_compliance"
+              action="gear_on_rent.action_gear_loto_request"
+              sequence="20"/>
+</odoo>

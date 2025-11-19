@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_sale_order_form_inherit_gear_on_rent" model="ir.ui.view">
+        <field name="name">sale.order.form.gear.on.rent</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='order_details']" position="inside">
+                <field name="x_billing_category" widget="selection" help="Select 'RMC' to trigger the production-based workflow."/>
+                <field name="x_workcenter_id"
+                       context="{'default_company_id': company_id}"
+                       help="Primary work center used for this contract; overrides the product default."/>
+            </xpath>
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="Contract / Cooling">
+                    <group>
+                        <field name="x_cooling_period_months"/>
+                        <field name="x_cooling_end" readonly="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

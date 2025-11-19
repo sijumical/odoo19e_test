@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <record id="action_report_month_end" model="ir.actions.report">
+      <field name="name">RMC Month-End Report</field>
+      <field name="model">account.move</field>
+      <field name="report_name">gear_on_rent.report_month_end</field>
+      <field name="report_type">qweb-pdf</field>
+      <field name="print_report_name">'%s Month-End' % (object.name or 'Invoice')</field>
+      <field name="binding_model_id" ref="account.model_account_move"/>
+    </record>
+
+    <template id="report_month_end">
+      <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+          <t t-set="payload" t-value="doc._gear_get_month_end_payload()"/>
+          <t t-call="web.external_layout">
+            <div class="gor-page">
+            <style>
+              .gor-page{width:90%;margin:0 auto;}
+              .gor-kv-table{width:100%;border-collapse:collapse;margin-bottom:12px;}
+              .gor-kv-table th{padding:2px 6px;text-align:left;font-weight:600;border:none;}
+              .gor-kv-table td{padding:2px 6px;text-align:right;border:none;}
+              .gor-section-title{margin-top:18px;}
+              .gor-metric-table{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:12px;}
+              .gor-metric-table th{padding:4px 6px;text-align:left;border:none;border-bottom:1px solid #bbb;}
+              .gor-metric-table td{padding:4px 6px;text-align:right;border:none;border-bottom:1px solid #ddd;}
+              .gor-metric-table tr:last-child th,
+              .gor-metric-table tr:last-child td{border-bottom:none;}
+              .gor-metric-table.gor-metric-table--left td{text-align:left;}
+              .gor-metric-table.gor-metric-table--plain th,
+              .gor-metric-table.gor-metric-table--plain td{border:none;}
+              .gor-two-col{width:100%;margin-top:16px;display:flex;flex-wrap:wrap;gap:24px 0;}
+              .gor-two-col__col{flex:1 1 50%;padding:0 12px 0 0;}
+              .gor-two-col__col:last-child{padding-left:12px;padding-right:0;}
+              @page{
+                margin:20mm 15mm 25mm 15mm;
+                @bottom-right{
+                  content:element(gor-footer);
+                }
+              }
+              .gor-inline-table{width:100%;}
+              .gor-inline-table th,
+              .gor-inline-table td{border:none;border-bottom:1px solid #ddd;}
+              .gor-inline-table tr:last-child th,
+              .gor-inline-table tr:last-child td{border-bottom:none;}
+              .gor-full-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:12px;}
+              .gor-full-table th,
+              .gor-full-table td{padding:4px 6px;border:none;border-bottom:1px solid #ddd;}
+              .gor-full-table th{text-align:left;border-bottom:1px solid #bbb;}
+              .gor-full-table td{text-align:right;}
+              .gor-full-table tbody tr:last-child td{border-bottom:none;}
+              .gor-full-table thead{display:table-header-group;}
+              .gor-text-left{text-align:left;}
+              .gor-text-center{text-align:center;}
+              .gor-footer{position:running(gor-footer);font-size:10px;text-align:right;}
+              .gor-footer-placeholder{height:12mm;}
+            </style>
+            
+            <div class="row mb-3">
+              <div class="col-7">
+                <h2>Monthly Client Report</h2>
+                <div style="font-size:12px; line-height:1.7;">
+                  <div><strong>Invoice:</strong>
+                    <span t-esc="payload.get('invoice_name')"/></div>
+                  <div><strong>Contract:</strong>
+                    <span t-esc="payload.get('contract_name')"/></div>
+                  <div><strong>Customer:</strong>
+                    <span t-esc="payload.get('customer_name')"/></div>
+                </div>
+              </div>
+              <div class="col-5 text-end" style="text-align: right;">
+                <p class="h4 mb-1" t-esc="payload.get('month_label')"/>
+                <p class="lead mb-0">
+                  <strong t-esc="payload.get('version_label')"/>
+                </p>
+              </div>
+            </div>
+
+            <div class="gor-two-col">
+              <div class="gor-two-col__col">
+                <h3>LOTO Wave-Off Summary</h3>
+                <table class="gor-metric-table">
+                  <tbody>
+                    <tr>
+                      <th>Total LOTO Approved Hours</th>
+                      <td>
+                        <t t-esc="payload.get('loto_total_hours', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Wave-Off Allowance</th>
+                      <td>
+                        <t t-esc="payload.get('waveoff_allowance', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Wave-Off Applied This Month</th>
+                      <td style="color:#198754;">
+                        <t t-esc="payload.get('waveoff_applied', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Chargeable LOTO Hours</th>
+                      <td style="color:#ba1b1b;">
+                        <t t-esc="payload.get('loto_chargeable_hours', 0.0)"/>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="gor-two-col__col">
+                <h4>Operational Metrics</h4>
+                <table class="gor-metric-table">
+                  <tbody>
+                    <tr>
+                      <th>Monthly MGQ Target</th>
+                      <td>
+                        <t t-esc="payload.get('target_qty', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Adjusted MGQ</th>
+                      <td>
+                        <t t-esc="payload.get('adjusted_target_qty', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>NGT Hours</th>
+                      <td>
+                        <t t-esc="payload.get('ngt_hours', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>NGT Relief (m^3)</th>
+                      <td>
+                        <t t-esc="payload.get('ngt_qty', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Prime Output Production (m^3)</th>
+                      <td>
+                        <t t-esc="payload.get('prime_output_qty', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Optimized Standby</th>
+                      <td>
+                        <t t-esc="payload.get('optimized_standby', 0.0)"/>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <h4 class="mt-3">Exceptions &amp; Notes</h4>
+            <table class="gor-metric-table gor-metric-table--left">
+              <tbody>
+                <tr>
+                  <th>Materials Shortage</th>
+                  <td>
+                    <t t-esc="payload.get('materials_shortage') or 'N/A'"/>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Manpower</th>
+                  <td>
+                    <t t-esc="payload.get('manpower_notes') or 'N/A'"/>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Assets</th>
+                  <td>
+                    <t t-esc="payload.get('asset_notes') or 'N/A'"/>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="gor-two-col">
+              <div class="gor-two-col__col">
+                <h5>Cooling Windows</h5>
+                <table class="gor-metric-table gor-inline-table">
+                  <tbody>
+                    <tr>
+                      <th>Prorated MGQ</th>
+                      <td>
+                        <t t-esc="payload.get('cooling_totals', {}).get('target_qty', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Prime Output (m^3)</th>
+                      <td>
+                        <t t-esc="payload.get('cooling_totals', {}).get('prime_output_qty', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>NGT Billed (m^3)</th>
+                      <td>
+                        <t t-esc="payload.get('cooling_totals', {}).get('ngt_m3', 0.0)"/>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="gor-two-col__col">
+                <h5>Normal Windows</h5>
+                <table class="gor-metric-table gor-inline-table">
+                  <tbody>
+                    <tr>
+                      <th>Monthly MGQ</th>
+                      <td>
+                        <t t-esc="payload.get('normal_totals', {}).get('target_qty', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Prime Output (m^3)</th>
+                      <td>
+                        <t t-esc="payload.get('normal_totals', {}).get('prime_output_qty', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Standby (m^3)</th>
+                      <td>
+                        <t t-esc="payload.get('normal_totals', {}).get('standby_qty', 0.0)"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>NGT from Approvals (m^3)</th>
+                      <td>
+                        <t t-esc="payload.get('normal_totals', {}).get('ngt_m3', 0.0)"/>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <h4 class="mt-4">Manufacturing Orders</h4>
+            <table class="gor-full-table">
+              <thead style="display: table-header-group;">
+                <tr>
+                  <th>Date</th>
+                  <th>Reference</th>
+                  <th>Cooling</th>
+                  <th>Daily MGQ</th>
+                  <th>Adjusted MGQ</th>
+                  <th>Prime Output</th>
+                  <th>Optimized Standby</th>
+                  <th>NGT Hours</th>
+                  <th>LOTO Hours</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr t-if="not payload.get('manufacturing_orders')">
+                  <td colspan="9" class="gor-text-center">
+                    No manufacturing orders were recorded for this period.
+                  </td>
+                </tr>
+                <t t-foreach="payload.get('manufacturing_orders', [])" t-as="mo">
+                  <tr>
+                    <td class="gor-text-left">
+                      <t t-esc="mo.get('date_start')"/>
+                    </td>
+                    <td class="gor-text-left">
+                      <t t-esc="mo.get('reference')"/>
+                    </td>
+                    <td class="gor-text-center">
+                      <span t-esc="mo.get('is_cooling') and 'Yes' or ''"/>
+                    </td>
+                    <td>
+                      <t t-esc="mo.get('daily_mgq', 0.0)"/>
+                    </td>
+                    <td>
+                      <t t-esc="mo.get('adjusted_mgq', 0.0)"/>
+                    </td>
+                    <td>
+                      <t t-esc="mo.get('prime_output', 0.0)"/>
+                    </td>
+                    <td>
+                      <t t-esc="mo.get('optimized_standby', 0.0)"/>
+                    </td>
+                    <td>
+                      <t t-esc="mo.get('ngt_hours', 0.0)"/>
+                    </td>
+                    <td>
+                      <t t-esc="mo.get('loto_hours', 0.0)"/>
+                    </td>
+                  </tr>
+                </t>
+              </tbody>
+            </table>
+            <div class="gor-footer-placeholder"/>
+            <div class="gor-footer">PTO....</div>
+            </div>
+          </t>
+        </t>
+      </t>
+    </template>
+  </data>
+</odoo>

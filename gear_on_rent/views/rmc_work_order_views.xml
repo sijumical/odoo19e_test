@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_rmc_monthly_order_tree" model="ir.ui.view">
+        <field name="name">gear.rmc.monthly.order.tree</field>
+        <field name="model">gear.rmc.monthly.order</field>
+        <field name="arch" type="xml">
+            <list string="Monthly Work Orders">
+                <field name="name"/>
+                <field name="so_id"/>
+                <field name="workcenter_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="x_window_start"/>
+                <field name="x_window_end"/>
+                <field name="x_is_cooling_period"/>
+                <field name="state"/>
+                <field name="monthly_target_qty"/>
+                <field name="adjusted_target_qty"/>
+                <field name="prime_output_qty"/>
+                <field name="optimized_standby_qty"/>
+                <field name="ngt_hours"/>
+                <field name="loto_hours"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rmc_monthly_order_form" model="ir.ui.view">
+        <field name="name">gear.rmc.monthly.order.form</field>
+        <field name="model">gear.rmc.monthly.order</field>
+        <field name="arch" type="xml">
+            <form string="RMC Monthly Work Order">
+                <header>
+                    <button name="action_schedule_orders"
+                            type="object"
+                            string="Generate Daily Orders"
+                            class="btn-primary"
+                            invisible="state == 'done'"/>
+                    <button name="action_mark_done"
+                            type="object"
+                            string="Mark Done"
+                            class="btn-success"
+                            invisible="state == 'done'"/>
+                    <button name="action_open_prepare_invoice"
+                            type="object"
+                            string="Prepare Invoice"
+                            class="btn-primary"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_form_label"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="so_id" required="1"/>
+                            <field name="product_id" required="1"/>
+                            <field name="workcenter_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="x_window_start" modifiers="{'readonly': [['state', '!=', 'draft']]}"/>
+                            <field name="x_window_end" modifiers="{'readonly': [['state', '!=', 'draft']]}"/>
+                            <field name="x_is_cooling_period"/>
+                            <field name="x_auto_email_daily"/>
+                        </group>
+                        <group>
+                            <field name="x_monthly_mgq_snapshot" readonly="1"/>
+                            <field name="monthly_target_qty" readonly="1"/>
+                            <field name="adjusted_target_qty" readonly="1"/>
+                            <field name="prime_output_qty" readonly="1"/>
+                            <field name="optimized_standby_qty" readonly="1" modifiers="{'invisible': [['x_is_cooling_period', '=', True]]}"/>
+                            <field name="downtime_relief_qty" readonly="1"/>
+                            <field name="ngt_hours" readonly="1"/>
+                            <field name="loto_hours" readonly="1"/>
+                            <field name="waveoff_hours_chargeable" readonly="1" modifiers="{'invisible': [('loto_hours', '&lt;=', 48.0)]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Manufacturing Orders">
+                            <field name="production_ids">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <button name="action_print_daily_report"
+                                    type="object"
+                                    icon="fa-print"
+                                    string="PDF"
+                                    class="btn-link"
+                                    context="{'download': True}"/>
+                            <field name="date_start"/>
+                            <field name="x_daily_target_qty" sum="Total"/>
+                            <field name="x_adjusted_target_qty" sum="Total"/>
+                            <field name="x_prime_output_qty" sum="Total"/>
+                            <field name="x_optimized_standby_qty" sum="Total" modifiers="{'column_invisible': [['parent.x_is_cooling_period', '=', True]]}"/>
+                            <field name="x_ngt_hours" sum="Total"/>
+                            <field name="x_loto_hours" sum="Total"/>
+                        </list>
+                    </field>
+                        </page>
+                        <page string="Dockets">
+                            <field name="docket_ids" readonly="1">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="docket_no"/>
+                                    <field name="workcenter_id"/>
+                                    <field name="qty_m3"/>
+                                    <field name="runtime_minutes"/>
+                                    <field name="idle_minutes"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rmc_monthly_order" model="ir.actions.act_window">
+        <field name="name">Monthly Work Orders</field>
+        <field name="res_model">gear.rmc.monthly.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p>
+                Manage the monthly work orders orchestrating daily manufacturing orders and IDS dockets.
+            </p>
+        </field>
+    </record>
+</odoo>

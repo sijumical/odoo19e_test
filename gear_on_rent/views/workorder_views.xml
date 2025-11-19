@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_mrp_workorder_form_inherit_gear_dockets" model="ir.ui.view">
+        <field name="name">mrp.workorder.form.inherit.gear.dockets</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_form_view_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="RMC Dockets" name="gear_rmc_docket_page">
+                    <field name="gear_docket_ids"
+                           context="{
+                               'default_workorder_id': id,
+                               'default_source': 'manual',
+                               'form_view_ref': 'gear_on_rent.view_gear_rmc_production_log_form',
+                               'tree_view_ref': 'gear_on_rent.view_gear_rmc_production_log_list',
+                           }">
+                        <list>
+                            <field name="date"/>
+                            <field name="docket_no"/>
+                            <field name="state" widget="badge"/>
+                            <field name="qty_m3"/>
+                            <field name="quantity_ordered"/>
+                            <field name="runtime_minutes"/>
+                            <field name="idle_minutes"/>
+                            <field name="source" optional="hide"/>
+                            <field name="notes" optional="hide"/>
+                        </list>
+                    </field>
+                </page>
+                <page string="RMC Recipe" name="gear_rmc_recipe_page">
+                    <group>
+                        <group>
+                            <field name="gear_recipe_product_id"/>
+                            <field name="gear_recipe_id"
+                                   options="{'no_create_edit': True, 'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="gear_recipe_line_ids" readonly="1">
+                                <list>
+                                    <field name="product_id"/>
+                                    <field name="product_qty"/>
+                                    <field name="product_uom_id"/>
+                                </list>
+                            </field>
+                        </group>
+                    </group>
+                </page>
+                <page string="RMC Batches" name="gear_rmc_batches_page">
+                    <field name="gear_batch_ids" readonly="1">
+                        <list>
+                            <field name="docket_id"/>
+                            <field name="batch_sequence"/>
+                            <field name="batch_code"/>
+                            <field name="quantity_ordered" sum="Total M³"/>
+                            <field name="ten_mm" sum="Σ 10mm"/>
+                            <field name="twenty_mm" sum="Σ 20mm"/>
+                            <field name="facs" sum="Σ FACS"/>
+                            <field name="water_batch" sum="Σ Water"/>
+                            <field name="flyash" sum="Σ Flyash"/>
+                            <field name="adm_plast" sum="Σ Admixture"/>
+                            <field name="waterr" sum="Σ WaterR"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
