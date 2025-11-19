@@ -4,12 +4,9 @@
 import base64
 from datetime import datetime, time
 
-from ofxparse import Account
-
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 from odoo.tools.float_utils import float_is_zero, float_compare
-from odoo.addons.rmc_manpower_contractor.models import agreement
 
 
 class RmcAgreementSettlementWizard(models.TransientModel):
@@ -177,9 +174,8 @@ class RmcAgreementSettlementWizard(models.TransientModel):
             ('agreement_id', '=', self.agreement_id.id),
             ('state', '!=', 'reconciled'),
             ('settlement_included', '=', False),
-            ('is_final', '=', True),
         ])
-        damage_total = sum(records.mapped('damage_cost'))
+        damage_total = sum(records.filtered('is_final').mapped('damage_cost'))
         variance_total = sum(records.mapped('variance_value'))
         self.write({
             'inventory_handover_ids': [(6, 0, records.ids)],
@@ -216,21 +212,15 @@ class RmcAgreementSettlementWizard(models.TransientModel):
             )
 
     def _evaluate_hold_state(self):
-      for wizard in self:
-        # 🔥 FIX: Active stage me hold detect mat karo
-        if wizard.agreement_id.state != 'closure_review':
-            wizard.write({'hold_detected': False, 'hold_reason': False})
-            return
-
-        # Otherwise normal logic
-        reasons = wizard.agreement_id._get_settlement_blockers(
-            currency=wizard.currency_id,
-            inventory_records=wizard.inventory_handover_ids,
-        )
-        wizard.write({
-            'hold_detected': bool(reasons),
-            'hold_reason': '\n'.join(reasons) if reasons else False,
-        })
+        for wizard in self:
+            reasons = wizard.agreement_id._get_settlement_blockers(
+                currency=wizard.currency_id,
+                inventory_records=wizard.inventory_handover_ids,
+            )
+            wizard.write({
+                'hold_detected': bool(reasons),
+                'hold_reason': '\n'.join(reasons) if reasons else False,
+            })
 
     def action_confirm(self):
         self.ensure_one()
@@ -239,13 +229,12 @@ class RmcAgreementSettlementWizard(models.TransientModel):
             raise ValidationError(_('Agreement must be in closure review before settlement.'))
         self._evaluate_hold_state()
         if self.hold_detected:
-            agreement.with_context(allow_agreement_locked_write=True).write({
+            agreement.write({
                 'settlement_hold': True,
                 'settlement_hold_reason': self.hold_reason,
             })
             raise ValidationError(_('Settlement cannot proceed:\n%s') % (self.hold_reason or ''))
-        agreement.with_context(allow_agreement_locked_write=True).write({
-            'settlement_hold': False, 'settlement_hold_reason': False})
+        agreement.write({'settlement_hold': False, 'settlement_hold_reason': False})
         move = self._perform_financial_action()
         self._mark_consumed_records()
         log = self._create_settlement_log(move)
@@ -295,27 +284,18 @@ class RmcAgreementSettlementWizard(models.TransientModel):
             'invoice_line_ids': line_vals,
         })
         return move
-    
+
     def _get_settlement_account(self):
-       agreement = self.agreement_id
-       Account = self.env['account.account']
-
-        # Odoo 19 compatible domain
-       domain = [
-           ('account_type', '=', 'expense'),
-           ('active', '=', True),]
-        
-
-         # Add company filter if the field exists
-       if 'company_id' in Account._fields and agreement.company_id:
-           domain.append(('company_id', '=', agreement.company_id.id))
-
-       account = Account.search(domain, limit=1)
-
-       if not account:
-           raise ValidationError(_('Please configure at least one expense account for settlement entries.'))
-       return account
-
+        agreement = self.agreement_id
+        Account = self.env['account.account']
+        account = Account.search([
+            ('company_id', '=', agreement.company_id.id),
+            ('internal_type', '=', 'expense'),
+            ('deprecated', '=', False),
+        ], limit=1)
+        if not account:
+            raise ValidationError(_('Please configure at least one expense account for settlement entries.'))
+        return account
 
     def _mark_consumed_records(self):
         reference = '%s/%s' % (self.agreement_id.name, fields.Date.context_today(self))
@@ -369,7 +349,7 @@ class RmcAgreementSettlementWizard(models.TransientModel):
     def _schedule_settlement_activities(self):
         agreement = self.agreement_id
         finance_group = self.env.ref('account.group_account_user', raise_if_not_found=False)
-        finance_user = finance_group.user_ids[:1] if finance_group and finance_group.user_ids else self.env.user
+        finance_user = finance_group.users[:1] if finance_group and finance_group.users else self.env.user
         agreement.activity_schedule(
             'mail.mail_activity_data_todo',
             user_id=finance_user.id,

@@ -170,14 +170,18 @@ class RmcInventoryHandover(models.Model):
             if record.agreement_id and not record.employee_id and record.agreement_id.driver_ids:
                 record.employee_id = record.agreement_id.driver_ids[:1]
 
-    _rmc_inventory_issued_qty_positive = models.Constraint(
-        'CHECK(issued_qty >= 0)',
-        'Issued quantity must be non-negative.',
-    )
-    _rmc_inventory_returned_qty_positive = models.Constraint(
-        'CHECK(returned_qty >= 0)',
-        'Returned quantity must be non-negative.',
-    )
+    _sql_constraints = [
+        (
+            'rmc_inventory_issued_qty_positive',
+            'CHECK(issued_qty >= 0)',
+            'Issued quantity must be non-negative.'
+        ),
+        (
+            'rmc_inventory_returned_qty_positive',
+            'CHECK(returned_qty >= 0)',
+            'Returned quantity must be non-negative.'
+        ),
+    ]
 
     @api.constrains('agreement_id', 'item_id', 'state')
     def _check_unique_active_request(self):

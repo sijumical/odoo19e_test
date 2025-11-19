@@ -141,6 +141,8 @@
                 <field name="production_id"/>
                 <field name="workorder_id"/>
                 <field name="workcenter_id"/>
+                <field name="reason_id"/>
+                <field name="reason_type"/>
                 <field name="qty_m3"/>
                 <field name="runtime_minutes"/>
                 <field name="idle_minutes"/>
@@ -172,6 +174,8 @@
                             <field name="date"/>
                             <field name="payload_timestamp"/>
                             <field name="source"/>
+                            <field name="reason_id"/>
+                            <field name="reason_type" readonly="1"/>
                         </group>
                     </group>
                     <notebook>

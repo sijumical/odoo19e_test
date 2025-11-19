@@ -11,8 +11,8 @@
                     <header>
                         <button name="action_preview_and_send" string="Preview &amp; Send" type="object" class="btn-secondary" invisible="state not in ['draft', 'offer', 'negotiation', 'verification']"/>
                         <button name="action_send_for_sign" string="Send for Signature" type="object" class="oe_highlight" invisible="state not in ['draft', 'offer', 'negotiation', 'verification']"/>
-                        <button name="action_start_closure" string="Start Closure" type="object" class="btn-outline-secondary" invisible="state not in ['active', 'expired'] or settlement_hold"/>
-                        <button name="action_open_settlement_wizard" string="Open Settlement Wizard" type="object" class="oe_highlight" invisible="state != 'closure_review'"/>
+                        <button name="action_start_closure" string="Start Closure" type="object" class="btn-outline-secondary" attrs="{'invisible': ['|', ('state', 'not in', ['active', 'expired']), ('settlement_hold', '=', True)]}"/>
+                        <button name="action_open_settlement_wizard" string="Open Settlement Wizard" type="object" class="oe_highlight" attrs="{'invisible': [('state', '!=', 'closure_review')]}"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,offer,sign_pending,active,closure_review,settled"/>
                     </header>
                     <sheet>
@@ -66,14 +66,14 @@
                             <button name="action_view_equipment_requests" type="object" class="oe_stat_button" icon="fa-wrench">
                                 <field name="equipment_request_count" widget="statinfo" string="Maint. Requests"/>
                             </button>
-                            <button name="action_view_sign_request" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="sign_request_id == False">
+                            <button name="action_view_sign_request" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="not sign_request_id">
                                 <field name="sign_state" widget="badge" string="Sign Status"/>
                             </button>
                         </div>
                         
-                        <widget name="web_ribbon" title="Signed" bg_color="text-bg-success" invisible="is_agreement_signed == False"/>
-                        <widget name="web_ribbon" title="Payment Hold" bg_color="text-bg-danger" invisible="payment_hold == False"/>
-                        <widget name="web_ribbon" title="Settlement Hold" bg_color="text-bg-warning" invisible="settlement_hold == False"/>
+                        <widget name="web_ribbon" title="Signed" bg_color="text-bg-success" invisible="not is_agreement_signed"/>
+                        <widget name="web_ribbon" title="Payment Hold" bg_color="text-bg-danger" invisible="not payment_hold"/>
+                        <widget name="web_ribbon" title="Settlement Hold" bg_color="text-bg-warning" invisible="not settlement_hold"/>
                         
                         <div class="oe_title">
                             <label for="name" string="Agreement"/>
@@ -107,9 +107,9 @@
                             <field name="optimized_standby_qty"/>
                             <field name="pending_items_count" widget="badge" decoration-danger="pending_items_count &gt; 0"/>
                             <field name="payment_hold" widget="boolean_toggle"/>
-                            <field name="payment_hold_reason" widget="text" colspan="4" invisible="payment_hold == False"/>
+                            <field name="payment_hold_reason" widget="text" invisible="not payment_hold" colspan="4"/>
                             <field name="settlement_hold" widget="boolean_toggle" readonly="1"/>
-                            <field name="settlement_hold_reason" widget="text" colspan="4" readonly="1" invisible="settlement_hold == False"/>
+                            <field name="settlement_hold_reason" widget="text" invisible="not settlement_hold" colspan="4" readonly="1"/>
                         </group>
                         
                         <!-- Financial -->
@@ -413,7 +413,7 @@
             <field name="name">rmc.contract.agreement.tree</field>
             <field name="model">rmc.contract.agreement</field>
             <field name="arch" type="xml">
-                <list string="RMC Agreements" decoration-success="state == 'active'" decoration-warning="payment_hold == True" decoration-muted="state == 'expired'" create="1" edit="1" delete="1">
+                <list string="RMC Agreements" decoration-success="state == 'active'" decoration-warning="payment_hold == True" decoration-muted="state == 'expired'">
                     <field name="name"/>
                     <field name="revision_no"/>
                     <field name="contractor_id"/>

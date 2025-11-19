@@ -26,6 +26,7 @@
         "views/gear_on_rent_templates.xml",
         "data/website_page_gear_on_rent.xml",
         "views/log_views.xml",
+        "views/reason_views.xml",
         "views/product_template_views.xml",
         "views/sale_order_views.xml",
         "views/workorder_views.xml",

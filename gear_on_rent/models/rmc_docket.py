@@ -155,7 +155,48 @@ class GearRmcDocket(models.Model):
     )
     operator_completion_time = fields.Datetime(string="Operator Completion Time")
     operator_notes = fields.Text(string="Operator Notes")
+    reason_id = fields.Many2one("gear.reason", string="Reason", tracking=True)
+    reason_type = fields.Selection(
+        selection=[("client", "Client"), ("maintenance", "Maintenance")],
+        string="Reason Type",
+        compute="_compute_reason_type",
+        store=True,
+    )
     active = fields.Boolean(default=True)
+
+    @api.depends("reason_id")
+    def _compute_reason_type(self):
+        for docket in self:
+            docket.reason_type = docket.reason_id.reason_type or "client"
+
+    def _gear_get_cycle_threshold(self):
+        param_val = (
+            self.env["ir.config_parameter"].sudo().get_param("gear_on_rent.cycle_minutes_threshold", "60")
+        )
+        try:
+            return float(param_val)
+        except (TypeError, ValueError):
+            return 60.0
+
+    def _gear_requires_reason(self):
+        self.ensure_one()
+        threshold = self._gear_get_cycle_threshold()
+        return bool(threshold and self.runtime_minutes and self.runtime_minutes > threshold)
+
+    @api.constrains("runtime_minutes", "reason_id")
+    def _check_runtime_reason(self):
+        threshold = self._gear_get_cycle_threshold()
+        for docket in self:
+            if docket.runtime_minutes and docket.runtime_minutes > threshold:
+                if not docket.reason_id:
+                    raise ValidationError(
+                        _("A reason is required when runtime exceeds %(minutes)s minutes.")
+                        % {"minutes": threshold}
+                    )
+                if docket.reason_type != "client":
+                    raise ValidationError(
+                        _("Client workflows must use a Client reason when the runtime threshold is exceeded.")
+                    )
 
     _sql_constraints = [
         ("unique_docket_per_contract", "unique(so_id, docket_no)", "The docket number must be unique per contract."),
@@ -531,6 +572,7 @@ class GearRmcDocket(models.Model):
             "notes": payload.get("notes"),
             "source": payload.get("source") or "ids",
             "state": "in_production",
+            "reason_id": payload.get("reason_id") or workorder.reason_id.id,
         }
         if docket:
             docket.write(vals)

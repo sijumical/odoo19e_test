@@ -18,3 +18,5 @@ access_gear_rmc_docket_line_manager,Gear RMC Docket Line Manager,gear_on_rent.mo
 access_gear_rmc_docket_batch_user,Gear RMC Docket Batch User,gear_on_rent.model_gear_rmc_docket_batch,gear_on_rent.group_gear_on_rent_user,1,1,1,0
 access_gear_rmc_docket_batch_manager,Gear RMC Docket Batch Manager,gear_on_rent.model_gear_rmc_docket_batch,gear_on_rent.group_gear_on_rent_manager,1,1,1,1
 access_prepare_invoice_wizard_manager,Gear Prepare Invoice Wizard Manager,gear_on_rent.model_gear_prepare_invoice_mrp,gear_on_rent.group_gear_on_rent_manager,1,1,1,0
+access_gear_reason_manager,Gear Reason Manager,gear_on_rent.model_gear_reason,gear_on_rent.group_gear_on_rent_manager,1,1,1,1
+access_gear_reason_user,Gear Reason User,gear_on_rent.model_gear_reason,gear_on_rent.group_gear_on_rent_user,1,0,0,0

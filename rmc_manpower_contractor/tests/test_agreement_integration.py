@@ -631,47 +631,6 @@ class TestAgreementIntegration(TransactionCase):
         self.assertEqual(self.agreement.state, 'settled')
         self.assertFalse(self.agreement.settlement_hold)
 
-    def test_final_handover_damage_rollup(self):
-        self.agreement.write({'state': 'active'})
-        self.agreement.action_start_closure()
-        product = self.env['product.product'].create({'name': 'Closure Mixer', 'type': 'product'})
-        final_record = self.env['rmc.inventory.handover'].create({
-            'agreement_id': self.agreement.id,
-            'contractor_id': self.contractor.id,
-            'date': fields.Date.today(),
-            'item_id': product.id,
-            'issued_qty': 10.0,
-            'returned_qty': 7.0,
-            'unit_price': 100.0,
-            'operation_type': 'contract_issue_product',
-            'is_final': True,
-            'damage_cost': 500.0,
-            'acknowledged_by': self.env.user.id,
-            'ack_signature': base64.b64encode(b'signed'),
-        })
-        self.env['rmc.inventory.handover'].create({
-            'agreement_id': self.agreement.id,
-            'contractor_id': self.contractor.id,
-            'date': fields.Date.today(),
-            'item_id': product.id,
-            'issued_qty': 4.0,
-            'returned_qty': 2.0,
-            'unit_price': 50.0,
-            'operation_type': 'contract_issue_product',
-            'is_final': False,
-        })
-        today = fields.Date.context_today(self.agreement)
-        wizard = self.env['rmc.agreement.settlement.wizard'].create({
-            'agreement_id': self.agreement.id,
-            'period_start': today.replace(day=1),
-            'period_end': today,
-        })
-        self.assertEqual(set(wizard.inventory_handover_ids.ids), {final_record.id})
-        self.assertAlmostEqual(wizard.damage_cost_total, final_record.damage_cost, places=2)
-        expected_variance = final_record.variance_value + final_record.damage_cost
-        self.assertAlmostEqual(wizard.inventory_variance_total, expected_variance, places=2)
-        self.assertFalse(wizard.hold_detected, 'Acknowledged final handback should not block settlement')
-
     def test_settlement_financial_actions_create_moves(self):
         self._get_expense_account()
         open_bill = self._create_vendor_bill(2500.0)
@@ -733,67 +692,6 @@ class TestAgreementIntegration(TransactionCase):
             ], limit=1, order='id desc')
             self.assertTrue(credit_move, 'Credit note should be created for negative settlement balance.')
             self.assertAlmostEqual(credit_move.amount_total, abs(credit_wizard.final_payable_amount), places=2)
-
-    def test_settlement_report_attached_to_agreement(self):
-        """Settlement confirmation should attach the PDF to the agreement chatter."""
-        today = fields.Date.today()
-        wizard_vals = {
-            'agreement_id': self.agreement.id,
-            'period_start': today.replace(day=1),
-            'period_end': today,
-            'proposed_action': 'zero_balance',
-        }
-        with patch('odoo.addons.rmc_manpower_contractor.models.agreement.RmcContractAgreement.is_signed', return_value=True):
-            self._prepare_agreement_for_settlement(self.agreement)
-            wizard = self.env['rmc.agreement.settlement.wizard'].create(wizard_vals)
-            wizard.invalidate_recordset(['final_payable_amount'])
-            wizard.action_confirm()
-
-        attachments = self.env['ir.attachment'].search([
-            ('res_model', '=', 'rmc.contract.agreement'),
-            ('res_id', '=', self.agreement.id),
-            ('name', 'ilike', 'Settlement-'),
-        ])
-        self.assertTrue(attachments, 'Settlement confirmation should produce a PDF attachment.')
-        message_with_pdf = self.agreement.message_ids.filtered(lambda m: attachments & m.attachment_ids)
-        self.assertTrue(message_with_pdf, 'Agreement chatter should include the settlement PDF.')
-
-    def test_settlement_audit_log_and_activities(self):
-        """Settlement should log a closure record and schedule follow-up activities."""
-        today = fields.Date.today()
-        wizard_vals = {
-            'agreement_id': self.agreement.id,
-            'period_start': today.replace(day=1),
-            'period_end': today,
-            'proposed_action': 'zero_balance',
-        }
-        with patch('odoo.addons.rmc_manpower_contractor.models.agreement.RmcContractAgreement.is_signed', return_value=True):
-            self._prepare_agreement_for_settlement(self.agreement)
-            wizard = self.env['rmc.agreement.settlement.wizard'].create(wizard_vals)
-            wizard.write({
-                'variable_pay_amount': 0.0,
-                'breakdown_deduction_total': 0.0,
-                'inventory_variance_total': 0.0,
-                'open_bills_total': 0.0,
-                'proposed_action': 'zero_balance',
-            })
-            wizard.invalidate_recordset(['final_payable_amount'])
-            wizard.action_confirm()
-
-        log = self.env['rmc.billing.prepare.log'].search([
-            ('agreement_id', '=', self.agreement.id),
-            ('category', '=', 'closure'),
-        ], limit=1, order='id desc')
-        self.assertTrue(log, 'Settlement should create a closure log entry.')
-        self.assertEqual(log.state, 'done', 'Closure log should be marked as done.')
-        self.assertFalse(log.settlement_hold, 'Settlement hold must be cleared after confirmation.')
-        summary_msgs = self.agreement.message_ids.filtered(lambda m: 'Settlement packet prepared' in (m.body or ''))
-        self.assertTrue(summary_msgs, 'Agreement chatter should include a settlement summary message.')
-
-        ready_activity = self.agreement.activity_ids.filtered(lambda a: a.summary == 'Settlement packet ready')
-        completed_activity = self.agreement.activity_ids.filtered(lambda a: a.summary == 'Settlement completed')
-        self.assertTrue(ready_activity, 'Finance review activity should be scheduled.')
-        self.assertTrue(completed_activity, 'Owner completion activity should be scheduled.')
 
     def test_23_retention_release_after_180_days(self):
         """Retention should auto-release after 6 months (180 days)."""

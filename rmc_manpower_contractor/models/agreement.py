@@ -1408,7 +1408,6 @@ class RmcContractAgreement(models.Model):
                 ('agreement_id', '=', self.id),
                 ('state', '!=', 'reconciled'),
                 ('settlement_included', '=', False),
-                ('is_final', '=', True),
             ])
         reasons = []
         if not self.is_signed():

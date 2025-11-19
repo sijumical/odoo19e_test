@@ -4,6 +4,7 @@ from . import loto_request
 from . import account_move
 from . import workcenter_ext
 from . import mrp_production_ext
+from . import reason
 from . import rmc_docket
 from . import rmc_work_order
 from . import product_template

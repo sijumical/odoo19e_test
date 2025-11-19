@@ -37,6 +37,12 @@
               action="gear_on_rent.action_gear_rmc_production_log"
               sequence="10"/>
 
+    <menuitem id="menu_gear_reason"
+              name="Reasons"
+              parent="menu_gear_on_rent_operations"
+              action="gear_on_rent.action_gear_reason"
+              sequence="12"/>
+
     <menuitem id="menu_gear_ngt_requests"
               name="NGT Requests"
               parent="menu_gear_on_rent_compliance"

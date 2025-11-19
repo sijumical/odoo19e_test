@@ -41,15 +41,15 @@
                             </page>
                             <page string="Open Bills">
                                 <field name="open_bill_ids" nolabel="1" readonly="1">
-                                    <list string="Open Vendor Bills">
-                                        <field name="display_name"/>
+                                    <tree string="Open Vendor Bills">
+                                        <field name="name"/>
                                         <field name="invoice_date"/>
                                         <field name="move_type"/>
                                         <field name="amount_total"/>
                                         <field name="amount_residual"/>
                                         <field name="payment_state"/>
                                         <field name="state"/>
-                                    </list>
+                                    </tree>
                                 </field>
                             </page>
                         </notebook>

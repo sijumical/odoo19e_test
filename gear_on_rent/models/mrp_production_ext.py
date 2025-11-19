@@ -116,10 +116,11 @@ class MrpProduction(models.Model):
             relief = min(base, production.x_relief_qty or 0.0)
             production.x_adjusted_target_qty = max(base - relief, 0.0)
 
-    @api.depends("x_docket_ids.qty_m3")
+    @api.depends("x_docket_ids.qty_m3", "x_docket_ids.reason_type")
     def _compute_prime_output_qty(self):
         for production in self:
-            production.x_prime_output_qty = sum(production.x_docket_ids.mapped("qty_m3"))
+            dockets = production.x_docket_ids.filtered(lambda d: d.reason_type == "client")
+            production.x_prime_output_qty = sum(dockets.mapped("qty_m3"))
 
     @api.depends("x_adjusted_target_qty", "x_prime_output_qty")
     def _compute_optimized_standby_qty(self):
@@ -128,11 +129,12 @@ class MrpProduction(models.Model):
             prime = production.x_prime_output_qty or 0.0
             production.x_optimized_standby_qty = max(adjusted - prime, 0.0)
 
-    @api.depends("x_docket_ids.runtime_minutes", "x_docket_ids.idle_minutes")
+    @api.depends("x_docket_ids.runtime_minutes", "x_docket_ids.idle_minutes", "x_docket_ids.reason_type")
     def _compute_runtime_idle_minutes(self):
         for production in self:
-            production.x_runtime_minutes = sum(production.x_docket_ids.mapped("runtime_minutes"))
-            production.x_idle_minutes = sum(production.x_docket_ids.mapped("idle_minutes"))
+            dockets = production.x_docket_ids.filtered(lambda d: d.reason_type == "client")
+            production.x_runtime_minutes = sum(dockets.mapped("runtime_minutes"))
+            production.x_idle_minutes = sum(dockets.mapped("idle_minutes"))
 
     def gear_allocate_relief_hours(self, hours, reason):
         """Apply downtime hours to the MO and adjust MGQ relief when applicable."""
@@ -296,7 +298,9 @@ class MrpProduction(models.Model):
             }
         )
 
-        docket_records = self.x_docket_ids.sorted(key=lambda d: (d.date or fields.Date.today(), d.id))
+        docket_records = self.x_docket_ids.filtered(lambda d: d.reason_type == "client").sorted(
+            key=lambda d: (d.date or fields.Date.today(), d.id)
+        )
         docket_rows = [
             {
                 "docket_no": docket.docket_no,
@@ -318,6 +322,8 @@ class MrpProduction(models.Model):
                 key=lambda wo: (wo.date_start or fields.Datetime.now(), wo.id)
             )
             for workorder in fallback_workorders:
+                if workorder.reason_type != "client":
+                    continue
                 qty = workorder.qty_produced or 0.0
                 duration = workorder.duration or 0.0
                 if not qty and not duration:
@@ -481,17 +487,27 @@ class MrpWorkorder(models.Model):
         digits=(16, 2),
         help="Target quantity (m³) allocated to this work order chunk.",
     )
+    reason_id = fields.Many2one("gear.reason", string="Reason")
+    reason_type = fields.Selection(
+        selection=[("client", "Client"), ("maintenance", "Maintenance")],
+        string="Reason Type",
+        compute="_compute_reason_type",
+        store=True,
+        readonly=True,
+    )
 
-    @api.depends("gear_docket_ids.qty_m3")
+    @api.depends("gear_docket_ids.qty_m3", "gear_docket_ids.reason_type")
     def _compute_prime_output_qty(self):
         for workorder in self:
-            workorder.gear_prime_output_qty = sum(workorder.gear_docket_ids.mapped("qty_m3"))
+            dockets = workorder.gear_docket_ids.filtered(lambda d: d.reason_type == "client")
+            workorder.gear_prime_output_qty = sum(dockets.mapped("qty_m3"))
 
-    @api.depends("gear_docket_ids.runtime_minutes", "gear_docket_ids.idle_minutes")
+    @api.depends("gear_docket_ids.runtime_minutes", "gear_docket_ids.idle_minutes", "gear_docket_ids.reason_type")
     def _compute_runtime_idle_minutes(self):
         for workorder in self:
-            workorder.gear_runtime_minutes = sum(workorder.gear_docket_ids.mapped("runtime_minutes"))
-            workorder.gear_idle_minutes = sum(workorder.gear_docket_ids.mapped("idle_minutes"))
+            dockets = workorder.gear_docket_ids.filtered(lambda d: d.reason_type == "client")
+            workorder.gear_runtime_minutes = sum(dockets.mapped("runtime_minutes"))
+            workorder.gear_idle_minutes = sum(dockets.mapped("idle_minutes"))
 
     @api.depends("gear_recipe_id", "gear_recipe_id.bom_line_ids")
     def _compute_gear_recipe_line_ids(self):
@@ -504,6 +520,11 @@ class MrpWorkorder(models.Model):
             batches = workorder.gear_docket_ids.mapped("docket_batch_ids")
             workorder.gear_batch_ids = batches
 
+    @api.depends("reason_id")
+    def _compute_reason_type(self):
+        for workorder in self:
+            workorder.reason_type = workorder.reason_id.reason_type or "client"
+
     @api.onchange("production_id")
     def _onchange_production_id_set_recipe_product(self):
         if self.production_id and not self.gear_recipe_product_id:
@@ -514,12 +535,34 @@ class MrpWorkorder(models.Model):
         if self.gear_recipe_id and self.gear_recipe_id.product_tmpl_id != self.gear_recipe_product_id.product_tmpl_id:
             self.gear_recipe_id = False
 
+    def _gear_get_cycle_threshold(self):
+        param_val = (
+            self.env["ir.config_parameter"].sudo().get_param("gear_on_rent.cycle_minutes_threshold", "60")
+        )
+        try:
+            return float(param_val)
+        except (TypeError, ValueError):
+            return 60.0
+
+    def _gear_requires_reason(self):
+        self.ensure_one()
+        threshold = self._gear_get_cycle_threshold()
+        return bool(threshold and self.duration and self.duration > threshold)
+
     def button_start(self, raise_on_invalid_state=False, bypass=False):
         res = super().button_start(raise_on_invalid_state=raise_on_invalid_state, bypass=bypass)
         self._gear_update_docket_states(target_state="in_production")
         return res
 
     def button_finish(self):
+        for workorder in self:
+            if workorder._gear_requires_reason():
+                if not workorder.reason_id:
+                    raise UserError(
+                        _("A reason is required when the work order duration exceeds the configured threshold.")
+                    )
+                if workorder.reason_type != "client":
+                    raise UserError(_("Client workflows must use a Client reason to finish the work order."))
         res = super().button_finish()
         self._gear_finalize_dockets()
         return res
@@ -579,25 +622,28 @@ class MrpWorkorder(models.Model):
                     date_value = local_dt.date() if local_dt else fields.Date.context_today(workorder)
             else:
                 date_value = fields.Date.context_today(workorder)
-            docket_vals = {
-                "so_id": sale_order.id,
-                "production_id": production.id,
-                "workorder_id": workorder.id,
-                "workcenter_id": workorder.workcenter_id.id if workorder.workcenter_id else False,
-                "monthly_order_id": getattr(production, "x_monthly_order_id", False) and production.x_monthly_order_id.id or False,
-                "docket_no": docket_no,
-                "date": date_value,
-                "source": "manual",
-                "state": "draft",
-                "quantity_ordered": workorder.gear_qty_planned or workorder.qty_production or production.product_qty,
-                "payload_timestamp": workorder.date_start,
-            }
-            docket_model.create(docket_vals)
+                docket_vals = {
+                    "so_id": sale_order.id,
+                    "production_id": production.id,
+                    "workorder_id": workorder.id,
+                    "workcenter_id": workorder.workcenter_id.id if workorder.workcenter_id else False,
+                    "monthly_order_id": getattr(production, "x_monthly_order_id", False) and production.x_monthly_order_id.id or False,
+                    "docket_no": docket_no,
+                    "date": date_value,
+                    "source": "manual",
+                    "state": "draft",
+                    "reason_id": workorder.reason_id.id if workorder.reason_id else False,
+                    "quantity_ordered": workorder.gear_qty_planned or workorder.qty_production or production.product_qty,
+                    "payload_timestamp": workorder.date_start,
+                }
+                docket_model.create(docket_vals)
 
     def _gear_update_docket_states(self, target_state):
         valid_states = {"draft", "in_production", "ready", "dispatched"}
         for workorder in self:
-            dockets = workorder.gear_docket_ids.filtered(lambda d: d.state in valid_states)
+            dockets = workorder.gear_docket_ids.filtered(
+                lambda d: d.state in valid_states and d.reason_type == "client"
+            )
             if not dockets:
                 continue
             if target_state == "in_production":
@@ -612,7 +658,7 @@ class MrpWorkorder(models.Model):
 
     def _gear_finalize_dockets(self):
         for workorder in self:
-            dockets = workorder.gear_docket_ids
+            dockets = workorder.gear_docket_ids.filtered(lambda d: d.reason_type == "client")
             if not dockets:
                 continue
             produced_qty = (

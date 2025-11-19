@@ -38,6 +38,7 @@
     ],
     'data': [
         'security/security_groups.xml',
+        'security/bonus_rule_models.xml',
         'security/ir.model.access.csv',
         'security/record_rules.xml',
         'data/config_parameters.xml',

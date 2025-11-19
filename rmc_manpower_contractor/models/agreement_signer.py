@@ -28,10 +28,13 @@ class RmcAgreementSigner(models.Model):
     )
     sequence = fields.Integer(default=10)
 
-    _unique_agreement_role = models.Constraint(
-        'unique(agreement_id, role_id)',
-        'A role can be assigned only once per agreement.'
-    )
+    _sql_constraints = [
+        (
+            'unique_agreement_role',
+            'unique(agreement_id, role_id)',
+            'A role can be assigned only once per agreement.'
+        )
+    ]
 
     @api.constrains('partner_id')
     def _check_partner_company(self):

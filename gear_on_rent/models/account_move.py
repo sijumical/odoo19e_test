@@ -123,7 +123,9 @@ class AccountMove(models.Model):
             prime_output = self.gear_prime_output_qty or total_prime
             optimized_standby = self.gear_optimized_standby_qty or total_standby
 
-            dockets = month_orders.mapped("docket_ids").filtered(lambda d: month_start <= d.date <= month_end)
+            dockets = month_orders.mapped("docket_ids").filtered(
+                lambda d: d.reason_type == "client" and month_start <= d.date <= month_end
+            )
             dockets = dockets.sorted(key=lambda d: (d.date, d.id))
             productions = month_orders.mapped("production_ids").filtered(
                 lambda p: p.date_start and month_start <= fields.Datetime.to_datetime(p.date_start).date() <= month_end
@@ -161,6 +163,7 @@ class AccountMove(models.Model):
                     ("so_id", "in", orders.ids),
                     ("date", ">=", month_start),
                     ("date", "<=", month_end),
+                    ("reason_type", "=", "client"),
                 ],
                 order="date asc",
             )

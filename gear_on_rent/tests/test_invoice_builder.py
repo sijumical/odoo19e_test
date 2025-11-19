@@ -6,6 +6,7 @@ try:  # pragma: no cover - skip when the Odoo framework is unavailable
     from odoo import fields
     from odoo.tests import Form, SavepointCase
     from odoo.tests.common import new_test_request
+    from odoo.exceptions import UserError, ValidationError
 except ModuleNotFoundError:  # pragma: no cover
     pytest.skip(
         "The Odoo test framework is not available in this execution environment.",
@@ -51,6 +52,19 @@ class TestGearOnRentMrp(SavepointCase):
                 "time_start": 0,
                 "time_stop": 0,
                 "x_ids_external_id": "PLANT-1",
+            }
+        )
+
+        cls.client_reason = cls.env["gear.reason"].create(
+            {
+                "name": "Client Delay",
+                "reason_type": "client",
+            }
+        )
+        cls.maintenance_reason = cls.env["gear.reason"].create(
+            {
+                "name": "Planned Maintenance",
+                "reason_type": "maintenance",
             }
         )
 
@@ -151,6 +165,57 @@ class TestGearOnRentMrp(SavepointCase):
             self.monthly_order.date_start,
             "Default docket should align with the monthly start date.",
         )
+
+    def test_long_cycle_requires_client_reason(self):
+        self.env["ir.config_parameter"].sudo().set_param("gear_on_rent.cycle_minutes_threshold", "30")
+        production = self._get_first_production()
+        docket = production.x_docket_ids[:1]
+        with self.assertRaises(ValidationError):
+            docket.write({"runtime_minutes": 45.0})
+        with self.assertRaises(ValidationError):
+            docket.write({"runtime_minutes": 45.0, "reason_id": self.maintenance_reason.id})
+
+        docket.write({"runtime_minutes": 45.0, "reason_id": self.client_reason.id})
+        workorder = production.workorder_ids[:1]
+        workorder.write({"duration": 45.0, "reason_id": self.client_reason.id})
+        self.assertTrue(workorder._gear_requires_reason())
+        self.assertEqual(workorder.reason_type, "client")
+
+    def test_maintenance_dockets_excluded_from_invoice(self):
+        production = self._get_first_production()
+        workorder = production.workorder_ids[:1]
+        client_docket = production.x_docket_ids[:1]
+        client_docket.write(
+            {
+                "qty_m3": 20.0,
+                "runtime_minutes": 40.0,
+                "reason_id": self.client_reason.id,
+            }
+        )
+        maintenance_docket = self.env["gear.rmc.docket"].create(
+            {
+                "so_id": production.x_sale_order_id.id,
+                "production_id": production.id,
+                "workorder_id": workorder.id,
+                "workcenter_id": workorder.workcenter_id.id,
+                "docket_no": "MAINT-TEST",
+                "date": production.x_monthly_order_id.date_start,
+                "qty_m3": 15.0,
+                "runtime_minutes": 50.0,
+                "reason_id": self.maintenance_reason.id,
+            }
+        )
+        maintenance_docket.invalidate_recordset()
+        self.monthly_order.invalidate_recordset()
+
+        wizard = Form(self.env["gear.prepare.invoice.mrp"])
+        wizard.monthly_order_id = self.monthly_order
+        wizard.invoice_date = fields.Date.to_date("2025-03-31")
+        prepare = wizard.save()
+        action = prepare.action_prepare_invoice()
+        invoice = self.env["account.move"].browse(action["res_id"])
+
+        self.assertAlmostEqual(invoice.gear_prime_output_qty, 20.0, places=2)
 
     def test_invoice_builder_uses_mrp_metrics(self):
         production = self._get_first_production()
