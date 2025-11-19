@@ -15,7 +15,7 @@ class RmcAgreementBonusRule(models.Model):
         required=True,
         ondelete='cascade'
     )
-    sequence = fields.Integer(default=10)
+    sequence = fields.Integer(string="Sequence", default=10)
     name = fields.Char(string='Rule Label', required=True, translate=True)
     rule_type = fields.Selection(
         selection=[
@@ -27,8 +27,8 @@ class RmcAgreementBonusRule(models.Model):
         default='bonus'
     )
     trigger_condition = fields.Char(
-        string='Trigger',
-        help='Condition or KPI threshold that activates this adjustment.'
+        string="Trigger Condition",
+    help="Condition or KPI threshold that activates this rule."
     )
     percentage = fields.Float(
         string='Adjustment (%)',

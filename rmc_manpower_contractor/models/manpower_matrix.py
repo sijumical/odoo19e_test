@@ -223,15 +223,11 @@ class RmcManpowerMatrix(models.Model):
             record.attendance_prorated_amount = prorated
             record.attendance_deduction_amount = deduction
 
-    _sql_constraints = [
-        (
-            'rmc_manpower_headcount_positive',
-            'CHECK(headcount > 0)',
-            'Headcount must be positive.'
-        ),
-        (
-            'rmc_manpower_base_rate_positive',
-            'CHECK(base_rate >= 0)',
-            'Base rate must be non-negative.'
-        ),
-    ]
+    _rmc_manpower_headcount_positive = models.Constraint(
+        'CHECK(headcount > 0)',
+        'Headcount must be positive.'
+    )
+    _rmc_manpower_base_rate_positive = models.Constraint(
+        'CHECK(base_rate >= 0)',
+        'Base rate must be non-negative.'
+    )

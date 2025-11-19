@@ -307,10 +307,7 @@ class RmcMaintenanceCheck(models.Model):
         if created or updated:
             _logger.info("Maintenance auto-sync: created=%s, updated=%s", created, updated)
 
-    _sql_constraints = [
-        (
-            'rmc_maintenance_cost_positive',
-            'CHECK(cost >= 0)',
-            'Cost must be non-negative.'
-        ),
-    ]
+    _rmc_maintenance_cost_positive = models.Constraint(
+        'CHECK(cost >= 0)',
+        'Cost must be non-negative.',
+    )

@@ -365,18 +365,14 @@ class RmcDieselLog(models.Model):
             ICP.set_param(self._DIESEL_SYNC_PARAM, fields.Datetime.to_string(latest))
         _logger.info("Diesel auto-sync processed %s fleet issues.", processed)
 
-    _sql_constraints = [
-        (
-            'rmc_diesel_closing_ltr_positive',
-            'CHECK(closing_ltr >= 0)',
-            'Closing liters must be non-negative.'
-        ),
-        (
-            'rmc_diesel_issued_ltr_positive',
-            'CHECK(issued_ltr >= 0)',
-            'Issued liters must be non-negative.'
-        ),
-    ]
+    _rmc_diesel_closing_ltr_positive = models.Constraint(
+        'CHECK(closing_ltr >= 0)',
+        'Closing liters must be non-negative.',
+    )
+    _rmc_diesel_issued_ltr_positive = models.Constraint(
+        'CHECK(issued_ltr >= 0)',
+        'Issued liters must be non-negative.',
+    )
 
 
 class DieselLog(models.Model):
@@ -384,7 +380,7 @@ class DieselLog(models.Model):
 
     rmc_agreement_id = fields.Many2one(
         'rmc.contract.agreement',
-        string='RMC Agreement',
+        string=' Agreement',
         compute='_compute_rmc_agreement',
         store=True,
         index=True,

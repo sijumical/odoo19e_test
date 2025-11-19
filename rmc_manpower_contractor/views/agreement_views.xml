@@ -413,7 +413,7 @@
             <field name="name">rmc.contract.agreement.tree</field>
             <field name="model">rmc.contract.agreement</field>
             <field name="arch" type="xml">
-                <list string="RMC Agreements" decoration-success="state == 'active'" decoration-warning="payment_hold == True" decoration-muted="state == 'expired'">
+                <list string="RMC Agreements" decoration-success="state == 'active'" decoration-warning="payment_hold == True" decoration-muted="state == 'expired'" create="1" edit="1" delete="1">
                     <field name="name"/>
                     <field name="revision_no"/>
                     <field name="contractor_id"/>

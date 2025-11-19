@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
-from odoo.osv import expression
+from odoo.fields import Domain
 
 _logger = logging.getLogger(__name__)
 
@@ -255,23 +255,23 @@ class RmcAttendanceCompliance(models.Model):
         end_dt = datetime.combine(end_date + timedelta(days=1), datetime.min.time())
         start_str = fields.Datetime.to_string(start_dt)
         end_str = fields.Datetime.to_string(end_dt)
-        check_in_domain = expression.AND([
+        check_in_domain = Domain.AND([
             [('check_in', '!=', False)],
             [('check_in', '>=', start_str)],
             [('check_in', '<', end_str)],
         ])
-        check_out_domain = expression.AND([
+        check_out_domain = Domain.AND([
             [('check_out', '!=', False)],
             [('check_out', '>=', start_str)],
             [('check_out', '<', end_str)],
         ])
-        open_range = expression.AND([
+        open_range = Domain.AND([
             [('check_in', '<', end_str)],
             [('check_out', '>', start_str)],
         ])
-        return expression.OR([
-            expression.AND([check_in_domain, [('check_out', '=', False)]]),
-            expression.AND([check_out_domain, [('check_in', '=', False)]]),
+        return Domain.OR([
+            Domain.AND([check_in_domain, [('check_out', '=', False)]]),
+            Domain.AND([check_out_domain, [('check_in', '=', False)]]),
             open_range,
         ])
 
@@ -356,13 +356,10 @@ class RmcAttendanceCompliance(models.Model):
             start_date, end_date, created, updated
         )
 
-    _sql_constraints = [
-        (
-            'rmc_attendance_headcount_positive',
-            'CHECK(headcount_present >= 0)',
-            'Present headcount must be non-negative.'
-        ),
-    ]
+    _rmc_attendance_headcount_positive = models.Constraint(
+        'CHECK(headcount_present >= 0)',
+        'Present headcount must be non-negative.',
+    )
 
     @api.depends('employee_ids', 'date')
     def _compute_attendance_entries(self):
@@ -371,7 +368,7 @@ class RmcAttendanceCompliance(models.Model):
             record.attendance_entry_ids = Attendance.browse()
             if not record.date or not record.employee_ids:
                 continue
-            domain = expression.AND([
+            domain = Domain.AND([
                 [('employee_id', 'in', record.employee_ids.ids)],
                 self._attendance_domain(record.date, record.date),
             ])

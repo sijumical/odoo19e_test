@@ -2,6 +2,7 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_rmc_agreement_user,rmc.contract.agreement.user,model_rmc_contract_agreement,group_rmc_contractor_user,1,1,1,0
 access_rmc_agreement_supervisor,rmc.contract.agreement.supervisor,model_rmc_contract_agreement,group_rmc_supervisor,1,1,1,0
 access_rmc_agreement_manager,rmc.contract.agreement.manager,model_rmc_contract_agreement,group_rmc_manager,1,1,1,1
+access_rmc_agreement_base,rmc.contract.agreement.base,model_rmc_contract_agreement,base.group_user,1,1,1,0
 access_rmc_agreement_account,rmc.contract.agreement.account,model_rmc_contract_agreement,account.group_account_invoice,1,0,0,0
 access_rmc_manpower_matrix_user,rmc.manpower.matrix.user,model_rmc_manpower_matrix,group_rmc_contractor_user,1,1,1,0
 access_rmc_manpower_matrix_manager,rmc.manpower.matrix.manager,model_rmc_manpower_matrix,group_rmc_manager,1,1,1,1
