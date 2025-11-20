@@ -141,6 +141,10 @@
                 <field name="production_id"/>
                 <field name="workorder_id"/>
                 <field name="workcenter_id"/>
+                <field name="actual_loading_minutes"/>
+                <field name="excess_minutes"/>
+                <field name="excess_diesel_litre"/>
+                <field name="excess_diesel_amount"/>
                 <field name="reason_id"/>
                 <field name="reason_type"/>
                 <field name="qty_m3"/>
@@ -214,9 +218,13 @@
                                     <field name="qty_m3"/>
                                     <field name="slump"/>
                                     <field name="runtime_minutes"/>
+                                    <field name="actual_loading_minutes"/>
                                     <field name="idle_minutes"/>
                                 </group>
                                 <group>
+                                    <field name="excess_minutes" readonly="1"/>
+                                    <field name="excess_diesel_litre" readonly="1"/>
+                                    <field name="excess_diesel_amount" readonly="1"/>
                                     <field name="alarm_codes" widget="json"/>
                                     <field name="notes" colspan="2"/>
                                 </group>

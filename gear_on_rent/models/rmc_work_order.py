@@ -70,6 +70,21 @@ class GearRmcMonthlyOrder(models.Model):
         default=True,
         help="When checked, emailing a daily MO report will notify the customer automatically.",
     )
+    standard_loading_minutes = fields.Float(
+        string="Std. Loading Minutes",
+        digits=(16, 2),
+        help="Expected loading time per trip derived from the contract.",
+    )
+    diesel_burn_rate_per_hour = fields.Float(
+        string="Diesel Burn (L/hr)",
+        digits=(16, 2),
+        help="Diesel consumption rate snapshot for overrun billing.",
+    )
+    diesel_rate_per_litre = fields.Float(
+        string="Diesel Rate (/L)",
+        digits=(16, 2),
+        help="Billing rate per litre of diesel for overrun charges.",
+    )
     x_monthly_mgq_snapshot = fields.Float(
         string="Monthly MGQ Snapshot",
         digits=(16, 2),
@@ -186,6 +201,17 @@ class GearRmcMonthlyOrder(models.Model):
             "End date must not be earlier than start date.",
         )
     ]
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            so_id = vals.get("so_id")
+            if so_id:
+                order = self.env["sale.order"].browse(so_id)
+                vals.setdefault("standard_loading_minutes", order.standard_loading_minutes)
+                vals.setdefault("diesel_burn_rate_per_hour", order.diesel_burn_rate_per_hour)
+                vals.setdefault("diesel_rate_per_litre", order.diesel_rate_per_litre)
+        return super().create(vals_list)
 
     @api.depends("x_window_start", "x_window_end", "date_start", "date_end", "so_id", "so_id.x_monthly_mgq")
     def _compute_monthly_target_qty(self):
@@ -475,6 +501,9 @@ class GearRmcMonthlyOrder(models.Model):
                                 "product_qty": daily_target,
                                 "x_daily_target_qty": daily_target,
                                 "x_is_cooling_period": order.x_is_cooling_period,
+                                "standard_loading_minutes": order.standard_loading_minutes,
+                                "diesel_burn_rate_per_hour": order.diesel_burn_rate_per_hour,
+                                "diesel_rate_per_litre": order.diesel_rate_per_litre,
                             }
                         )
                 else:
@@ -491,6 +520,9 @@ class GearRmcMonthlyOrder(models.Model):
                         "x_sale_order_id": order.so_id.id,
                         "x_daily_target_qty": daily_target,
                         "x_is_cooling_period": order.x_is_cooling_period,
+                        "standard_loading_minutes": order.standard_loading_minutes,
+                        "diesel_burn_rate_per_hour": order.diesel_burn_rate_per_hour,
+                        "diesel_rate_per_litre": order.diesel_rate_per_litre,
                     }
                     production = Production.search(
                         [
