@@ -62,6 +62,21 @@ class MrpProduction(models.Model):
         digits=(16, 2),
         default=0.0,
     )
+    standard_loading_minutes = fields.Float(
+        string="Std. Loading Minutes",
+        digits=(16, 2),
+        help="Expected loading time per trip from the contract/monthly order.",
+    )
+    diesel_burn_rate_per_hour = fields.Float(
+        string="Diesel Burn (L/hr)",
+        digits=(16, 2),
+        help="Diesel consumption rate used for loading overrun calculations.",
+    )
+    diesel_rate_per_litre = fields.Float(
+        string="Diesel Rate (/L)",
+        digits=(16, 2),
+        help="Billing rate per litre of diesel for loading overruns.",
+    )
     x_is_cooling_period = fields.Boolean(
         string="Cooling Period Window",
         help="Indicates the parent monthly work order is within the cooling period.",

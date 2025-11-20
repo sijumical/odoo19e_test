@@ -74,6 +74,27 @@ class SaleOrder(models.Model):
         default=0.0,
         tracking=True,
     )
+    standard_loading_minutes = fields.Float(
+        string="Std. Loading Minutes",
+        digits=(16, 2),
+        help="Expected loading time per trip for rental/RMC contracts.",
+        tracking=True,
+        groups="gear_on_rent.group_gear_on_rent_manager",
+    )
+    diesel_burn_rate_per_hour = fields.Float(
+        string="Diesel Burn (L/hr)",
+        digits=(16, 2),
+        help="Diesel consumption rate used for loading overrun calculations.",
+        tracking=True,
+        groups="gear_on_rent.group_gear_on_rent_manager",
+    )
+    diesel_rate_per_litre = fields.Float(
+        string="Diesel Rate (/L)",
+        digits=(16, 2),
+        help="Billing rate per litre of diesel for loading overruns.",
+        tracking=True,
+        groups="gear_on_rent.group_gear_on_rent_manager",
+    )
     gear_materials_shortage_note = fields.Text(string="Materials Shortage Notes")
     gear_manpower_note = fields.Text(string="Manpower Notes")
     gear_asset_note = fields.Text(string="Asset Notes")
@@ -207,6 +228,9 @@ class SaleOrder(models.Model):
                     "x_window_end": window["window_end"],
                     "x_is_cooling_period": window["is_cooling"],
                     "x_monthly_mgq_snapshot": snapshot,
+                    "standard_loading_minutes": order.standard_loading_minutes,
+                    "diesel_burn_rate_per_hour": order.diesel_burn_rate_per_hour,
+                    "diesel_rate_per_litre": order.diesel_rate_per_litre,
                 }
                 if monthly:
                     monthly.write(vals)

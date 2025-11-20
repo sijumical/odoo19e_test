@@ -10,6 +10,11 @@
                 <field name="x_workcenter_id"
                        context="{'default_company_id': company_id}"
                        help="Primary work center used for this contract; overrides the product default."/>
+                <group attrs="{'invisible': [('x_billing_category', 'not in', ['rental', 'rmc'])]}">
+                    <field name="standard_loading_minutes" groups="gear_on_rent.group_gear_on_rent_manager"/>
+                    <field name="diesel_burn_rate_per_hour" groups="gear_on_rent.group_gear_on_rent_manager"/>
+                    <field name="diesel_rate_per_litre" groups="gear_on_rent.group_gear_on_rent_manager"/>
+                </group>
             </xpath>
             <xpath expr="//sheet/notebook" position="inside">
                 <page string="Contract / Cooling">

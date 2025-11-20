@@ -65,6 +65,33 @@ class GearRmcDocket(models.Model):
     slump = fields.Char(string="Slump")
     runtime_minutes = fields.Float(string="Runtime (min)", digits=(16, 2))
     idle_minutes = fields.Float(string="Idle (min)", digits=(16, 2))
+    actual_loading_minutes = fields.Float(
+        string="Actual Loading (min)",
+        digits=(16, 2),
+        help="Loading duration captured for this trip; operators may override.",
+        tracking=True,
+    )
+    excess_minutes = fields.Float(
+        string="Excess Loading (min)",
+        digits=(16, 2),
+        compute="_compute_loading_overrun",
+        store=True,
+        help="Minutes above the contract standard used for diesel overrun billing.",
+    )
+    excess_diesel_litre = fields.Float(
+        string="Excess Diesel (L)",
+        digits=(16, 2),
+        compute="_compute_loading_overrun",
+        store=True,
+        help="Diesel litres consumed due to loading overruns.",
+    )
+    excess_diesel_amount = fields.Float(
+        string="Excess Diesel Amount",
+        digits=(16, 2),
+        compute="_compute_loading_overrun",
+        store=True,
+        help="Billing value for diesel loading overruns.",
+    )
     alarm_codes = fields.Json(string="IDS Alarms", help="Telemetry alarms raised for this docket.", default=list)
 
     helpdesk_ticket_id = fields.Many2one("helpdesk.ticket", string="Ticket")
@@ -234,6 +261,44 @@ class GearRmcDocket(models.Model):
             else:
                 docket.is_rmc_product = False
 
+    @api.depends(
+        "actual_loading_minutes",
+        "monthly_order_id.standard_loading_minutes",
+        "monthly_order_id.diesel_burn_rate_per_hour",
+        "monthly_order_id.diesel_rate_per_litre",
+        "so_id.standard_loading_minutes",
+        "so_id.diesel_burn_rate_per_hour",
+        "so_id.diesel_rate_per_litre",
+    )
+    def _compute_loading_overrun(self):
+        for docket in self:
+            standard_minutes = (
+                docket.monthly_order_id.standard_loading_minutes
+                or docket.so_id.standard_loading_minutes
+                or 0.0
+            )
+            burn_rate = (
+                docket.monthly_order_id.diesel_burn_rate_per_hour
+                or docket.so_id.diesel_burn_rate_per_hour
+                or 0.0
+            )
+            litre_rate = (
+                docket.monthly_order_id.diesel_rate_per_litre
+                or docket.so_id.diesel_rate_per_litre
+                or 0.0
+            )
+            actual_minutes = docket.actual_loading_minutes or 0.0
+            excess_minutes = 0.0
+            if standard_minutes > 0 and actual_minutes > standard_minutes:
+                excess_minutes = actual_minutes - standard_minutes
+            docket.excess_minutes = excess_minutes
+
+            excess_litre = 0.0
+            if burn_rate > 0 and excess_minutes > 0:
+                excess_litre = (excess_minutes / 60.0) * burn_rate
+            docket.excess_diesel_litre = excess_litre
+            docket.excess_diesel_amount = excess_litre * litre_rate if excess_litre and litre_rate else 0.0
+
     @api.depends("recipe_id", "product_id", "so_id.order_line")
     def _compute_concrete_grade(self):
         pattern = re.compile(r"M\s*\d+", re.IGNORECASE)
@@ -278,6 +343,11 @@ class GearRmcDocket(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        protected_keys = {"excess_minutes", "excess_diesel_litre", "excess_diesel_amount"}
+        if any(protected_keys.intersection(vals) for vals in vals_list) and not self.env.user.has_group(
+            "gear_on_rent.group_gear_on_rent_manager"
+        ):
+            raise UserError(_("Only managers can adjust diesel overrun totals."))
         for vals in vals_list:
             if vals.get("name", "New") == "New":
                 vals["name"] = self.env["ir.sequence"].next_by_code("gear.rmc.docket") or "New"
@@ -293,6 +363,9 @@ class GearRmcDocket(models.Model):
         return records
 
     def write(self, vals):
+        protected_keys = {"excess_minutes", "excess_diesel_litre", "excess_diesel_amount"}
+        if protected_keys.intersection(vals) and not self.env.user.has_group("gear_on_rent.group_gear_on_rent_manager"):
+            raise UserError(_("Only managers can adjust diesel overrun totals."))
         res = super().write(vals)
         relevant_keys = {"production_id", "workorder_id", "so_id", "date", "payload_timestamp", "qty_m3"}
         if relevant_keys.intersection(vals):
@@ -353,6 +426,14 @@ class GearRmcDocket(models.Model):
         if not self.quantity_ordered and self.so_id:
             qty = sum(self.so_id.order_line.filtered(lambda l: not l.display_type).mapped("product_uom_qty"))
             self.quantity_ordered = qty
+        if "actual_loading_minutes" not in initial_vals and not self.actual_loading_minutes:
+            standard_minutes = False
+            if self.monthly_order_id:
+                standard_minutes = self.monthly_order_id.standard_loading_minutes
+            if not standard_minutes and self.so_id:
+                standard_minutes = self.so_id.standard_loading_minutes
+            if standard_minutes:
+                self.actual_loading_minutes = standard_minutes
 
     def _gear_sync_workorder_quantities(self):
         self.ensure_one()
