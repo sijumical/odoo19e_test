@@ -1,0 +1,216 @@
+<odoo>
+    <record id="view_complaint_pivot" model="ir.ui.view">
+        <field name="name">daily.manager.report.complaint.pivot</field>
+        <field name="model">daily.manager.report.complaint</field>
+        <field name="arch" type="xml">
+            <pivot string="Complaints">
+                <field name="date" type="row"/>
+                <field name="severity" type="col"/>
+                <field name="branch_id" type="col"/>
+                <field name="department_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_complaint_graph" model="ir.ui.view">
+        <field name="name">daily.manager.report.complaint.graph</field>
+        <field name="model">daily.manager.report.complaint</field>
+        <field name="arch" type="xml">
+            <graph string="Complaints" type="bar">
+                <field name="date" type="row" interval="day"/>
+                <field name="severity" type="col"/>
+                <field name="department_id" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_staff_log_pivot" model="ir.ui.view">
+        <field name="name">daily.manager.report.staff.log.pivot</field>
+        <field name="model">daily.manager.report.staff.log</field>
+        <field name="arch" type="xml">
+            <pivot string="Staff Issues">
+                <field name="attendance_flag" type="col"/>
+                <field name="branch_id" type="col"/>
+                <field name="department_id" type="col"/>
+                <field name="staff_id" type="row"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_staff_log_graph" model="ir.ui.view">
+        <field name="name">daily.manager.report.staff.log.graph</field>
+        <field name="model">daily.manager.report.staff.log</field>
+        <field name="arch" type="xml">
+            <graph string="Staff Issues" type="bar">
+                <field name="attendance_flag" type="row"/>
+                <field name="branch_id" type="col"/>
+                <field name="department_id" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_contractor_performance_pivot" model="ir.ui.view">
+        <field name="name">daily.manager.report.contractor.performance.pivot</field>
+        <field name="model">daily.manager.report.contractor.performance</field>
+        <field name="arch" type="xml">
+            <pivot string="Contractor Ratings">
+                <field name="contractor_id" type="row"/>
+                <field name="branch_id" type="col"/>
+                <field name="department_id" type="col"/>
+                <field name="rating" type="measure" group_operator="avg"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_contractor_performance_graph" model="ir.ui.view">
+        <field name="name">daily.manager.report.contractor.performance.graph</field>
+        <field name="model">daily.manager.report.contractor.performance</field>
+        <field name="arch" type="xml">
+            <graph string="Contractor Ratings" type="bar">
+                <field name="contractor_id" type="row"/>
+                <field name="rating" type="measure" group_operator="avg"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_metric_line_pivot" model="ir.ui.view">
+        <field name="name">daily.manager.report.metric.line.pivot</field>
+        <field name="model">daily.manager.report.metric.line</field>
+        <field name="arch" type="xml">
+            <pivot string="KPI Metrics" domain="[('metric_type', 'in', ('int', 'float'))]">
+                <field name="name" type="row"/>
+                <field name="branch_id" type="col"/>
+                <field name="department_id" type="col"/>
+                <field name="int_value" type="measure"/>
+                <field name="float_value" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_metric_line_graph" model="ir.ui.view">
+        <field name="name">daily.manager.report.metric.line.graph</field>
+        <field name="model">daily.manager.report.metric.line</field>
+        <field name="arch" type="xml">
+            <graph string="KPI Metrics" type="bar" domain="[('metric_type', 'in', ('int', 'float'))]">
+                <field name="name" type="row"/>
+                <field name="float_value" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_report_section_pivot" model="ir.ui.view">
+        <field name="name">daily.manager.report.section.pivot</field>
+        <field name="model">daily.manager.report.section</field>
+        <field name="arch" type="xml">
+            <pivot string="Dynamic Sections">
+                <field name="template_id" type="row"/>
+                <field name="branch_id" type="col"/>
+                <field name="department_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_report_section_graph" model="ir.ui.view">
+        <field name="name">daily.manager.report.section.graph</field>
+        <field name="model">daily.manager.report.section</field>
+        <field name="arch" type="xml">
+            <graph string="Dynamic Sections" type="bar">
+                <field name="template_id" type="row"/>
+                <field name="branch_id" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_branch_complaint_dashboard" model="ir.actions.act_window">
+        <field name="name">Branch Complaints</field>
+        <field name="res_model">daily.manager.report.complaint</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="domain">[("branch_id", "=", uid.company_id)]</field>
+    </record>
+    <record id="action_branch_staff_dashboard" model="ir.actions.act_window">
+        <field name="name">Branch Staff Issues</field>
+        <field name="res_model">daily.manager.report.staff.log</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="domain">[("branch_id", "=", uid.company_id)]</field>
+    </record>
+    <record id="action_branch_contractor_dashboard" model="ir.actions.act_window">
+        <field name="name">Branch Contractor Ratings</field>
+        <field name="res_model">daily.manager.report.contractor.performance</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="domain">[("branch_id", "=", uid.company_id)]</field>
+    </record>
+    <record id="action_branch_metric_dashboard" model="ir.actions.act_window">
+        <field name="name">Branch KPI Metrics</field>
+        <field name="res_model">daily.manager.report.metric.line</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="domain">[("branch_id", "=", uid.company_id), ("metric_type", "in", ("int", "float"))]</field>
+    </record>
+
+    <record id="action_branch_section_dashboard" model="ir.actions.act_window">
+        <field name="name">Branch Dynamic Sections</field>
+        <field name="res_model">daily.manager.report.section</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="domain">[("branch_id", "=", uid.company_id)]</field>
+    </record>
+
+    <record id="action_global_complaint_dashboard" model="ir.actions.act_window">
+        <field name="name">Global Complaints</field>
+        <field name="res_model">daily.manager.report.complaint</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+    <record id="action_global_staff_dashboard" model="ir.actions.act_window">
+        <field name="name">Global Staff Issues</field>
+        <field name="res_model">daily.manager.report.staff.log</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+    <record id="action_global_contractor_dashboard" model="ir.actions.act_window">
+        <field name="name">Global Contractor Ratings</field>
+        <field name="res_model">daily.manager.report.contractor.performance</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+    <record id="action_global_metric_dashboard" model="ir.actions.act_window">
+        <field name="name">Global KPI Metrics</field>
+        <field name="res_model">daily.manager.report.metric.line</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="domain">[("metric_type", "in", ("int", "float"))]</field>
+    </record>
+
+    <record id="action_global_section_dashboard" model="ir.actions.act_window">
+        <field name="name">Global Dynamic Sections</field>
+        <field name="res_model">daily.manager.report.section</field>
+        <field name="view_mode">pivot,graph</field>
+    </record>
+
+    <menuitem id="menu_dashboard_root" name="Dashboards" parent="menu_daily_reporting_root" sequence="20"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+    <menuitem id="menu_dashboard_branch" name="Branch Dashboard" parent="menu_dashboard_root" sequence="10"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+    <menuitem id="menu_dashboard_branch_complaints" name="Complaints" parent="menu_dashboard_branch"
+              action="action_branch_complaint_dashboard" sequence="10"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+    <menuitem id="menu_dashboard_branch_staff" name="Staff Issues" parent="menu_dashboard_branch"
+              action="action_branch_staff_dashboard" sequence="20"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+    <menuitem id="menu_dashboard_branch_contractor" name="Contractor Ratings" parent="menu_dashboard_branch"
+              action="action_branch_contractor_dashboard" sequence="30"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+    <menuitem id="menu_dashboard_branch_metrics" name="KPI Metrics" parent="menu_dashboard_branch"
+              action="action_branch_metric_dashboard" sequence="40"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+    <menuitem id="menu_dashboard_branch_sections" name="Dynamic Sections" parent="menu_dashboard_branch"
+              action="action_branch_section_dashboard" sequence="50"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+
+    <menuitem id="menu_dashboard_global" name="Global Dashboard" parent="menu_dashboard_root" sequence="20"
+              groups="universal_daily_reporting.group_reporting_admin"/>
+    <menuitem id="menu_dashboard_global_complaints" name="Complaints" parent="menu_dashboard_global"
+              action="action_global_complaint_dashboard" sequence="10"
+              groups="universal_daily_reporting.group_reporting_admin"/>
+    <menuitem id="menu_dashboard_global_staff" name="Staff Issues" parent="menu_dashboard_global"
+              action="action_global_staff_dashboard" sequence="20"
+              groups="universal_daily_reporting.group_reporting_admin"/>
+    <menuitem id="menu_dashboard_global_contractor" name="Contractor Ratings" parent="menu_dashboard_global"
+              action="action_global_contractor_dashboard" sequence="30"
+              groups="universal_daily_reporting.group_reporting_admin"/>
+    <menuitem id="menu_dashboard_global_metrics" name="KPI Metrics" parent="menu_dashboard_global"
+              action="action_global_metric_dashboard" sequence="40"
+              groups="universal_daily_reporting.group_reporting_admin"/>
+    <menuitem id="menu_dashboard_global_sections" name="Dynamic Sections" parent="menu_dashboard_global"
+              action="action_global_section_dashboard" sequence="50"
+              groups="universal_daily_reporting.group_reporting_admin"/>
+</odoo>

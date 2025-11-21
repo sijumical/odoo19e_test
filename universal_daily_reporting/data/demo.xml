@@ -1,0 +1,198 @@
+<odoo>
+    <!-- Demo companies/branches -->
+    <record id="company_branch_north" model="res.company">
+        <field name="name">Universal Branch North</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+    <record id="company_branch_south" model="res.company">
+        <field name="name">Universal Branch South</field>
+        <field name="currency_id" ref="base.USD"/>
+    </record>
+
+    <!-- Demo departments -->
+    <record id="department_operations_north" model="hr.department">
+        <field name="name">Operations North</field>
+        <field name="company_id" ref="company_branch_north"/>
+    </record>
+    <record id="department_operations_south" model="hr.department">
+        <field name="name">Operations South</field>
+        <field name="company_id" ref="company_branch_south"/>
+    </record>
+
+    <!-- Demo partners and employees -->
+    <record id="partner_customer_green" model="res.partner">
+        <field name="name">Green Retailer</field>
+        <field name="company_id" ref="company_branch_north"/>
+    </record>
+    <record id="partner_customer_blue" model="res.partner">
+        <field name="name">Blue Wholesale</field>
+        <field name="company_id" ref="company_branch_south"/>
+    </record>
+    <record id="partner_contractor_polar" model="res.partner">
+        <field name="name">Polar Contractors</field>
+        <field name="company_id" ref="company_branch_north"/>
+    </record>
+    <record id="partner_contractor_solar" model="res.partner">
+        <field name="name">Solar Logistics</field>
+        <field name="company_id" ref="company_branch_south"/>
+    </record>
+
+    <record id="employee_jane_manager" model="hr.employee">
+        <field name="name">Jane Manager</field>
+        <field name="company_id" ref="company_branch_north"/>
+        <field name="department_id" ref="department_operations_north"/>
+    </record>
+    <record id="employee_luis_supervisor" model="hr.employee">
+        <field name="name">Luis Supervisor</field>
+        <field name="company_id" ref="company_branch_south"/>
+        <field name="department_id" ref="department_operations_south"/>
+    </record>
+
+    <!-- KPI metric templates -->
+    <record id="metric_template_safety_incidents" model="daily.manager.metric.template">
+        <field name="name">Safety Incidents</field>
+        <field name="metric_type">int</field>
+        <field name="default_int_value">0</field>
+        <field name="sequence">1</field>
+    </record>
+    <record id="metric_template_on_time_delivery" model="daily.manager.metric.template">
+        <field name="name">On-Time Deliveries (%)</field>
+        <field name="metric_type">float</field>
+        <field name="default_float_value">98.5</field>
+        <field name="sequence">2</field>
+        <field name="company_id" ref="company_branch_north"/>
+    </record>
+    <record id="metric_template_refrigeration_temp" model="daily.manager.metric.template">
+        <field name="name">Refrigeration Temp (°C)</field>
+        <field name="metric_type">float</field>
+        <field name="default_float_value">4.2</field>
+        <field name="sequence">3</field>
+        <field name="branch_id" ref="company_branch_north"/>
+    </record>
+    <record id="metric_template_shift_mood" model="daily.manager.metric.template">
+        <field name="name">Shift Mood</field>
+        <field name="metric_type">selection</field>
+        <field name="selection_options">Good
+Neutral
+Stressed</field>
+        <field name="default_selection_value">Good</field>
+        <field name="sequence">4</field>
+    </record>
+    <record id="metric_template_line_utilization" model="daily.manager.metric.template">
+        <field name="name">Line Utilization (%)</field>
+        <field name="metric_type">float</field>
+        <field name="default_float_value">87.0</field>
+        <field name="sequence">5</field>
+        <field name="company_id" ref="company_branch_south"/>
+    </record>
+    <record id="metric_template_quality_score" model="daily.manager.metric.template">
+        <field name="name">Quality Score</field>
+        <field name="metric_type">int</field>
+        <field name="default_int_value">90</field>
+        <field name="sequence">6</field>
+        <field name="company_id" ref="company_branch_south"/>
+        <field name="department_id" ref="department_operations_south"/>
+    </record>
+
+    <!-- Dynamic section templates -->
+    <record id="section_template_global_highlights" model="daily.manager.section.template">
+        <field name="name">Highlights</field>
+        <field name="code">HGL</field>
+        <field name="sequence">1</field>
+    </record>
+    <record id="section_template_branch_north_followup" model="daily.manager.section.template">
+        <field name="name">North Branch Follow-ups</field>
+        <field name="code">NBF</field>
+        <field name="company_id" ref="company_branch_north"/>
+        <field name="branch_id" ref="company_branch_north"/>
+        <field name="sequence">2</field>
+    </record>
+    <record id="section_template_dept_ops_south" model="daily.manager.section.template">
+        <field name="name">Operations South Notes</field>
+        <field name="code">OPS</field>
+        <field name="company_id" ref="company_branch_south"/>
+        <field name="branch_id" ref="company_branch_south"/>
+        <field name="department_id" ref="department_operations_south"/>
+        <field name="sequence">3</field>
+    </record>
+
+    <!-- Daily reports with sample lines -->
+    <record id="daily_report_north" model="daily.manager.report">
+        <field name="date">2024-05-10</field>
+        <field name="company_id" ref="company_branch_north"/>
+        <field name="branch_id" ref="company_branch_north"/>
+        <field name="department_id" ref="department_operations_north"/>
+        <field name="manager_id" ref="base.user_admin"/>
+        <field name="activities"><![CDATA[<p>Reviewed safety drills and coordinated vendor deliveries.</p>]]></field>
+        <field name="notes">Follow-up on refrigeration maintenance scheduled tomorrow.</field>
+        <field name="state">submitted</field>
+        <field name="submitted_by" ref="base.user_admin"/>
+        <field name="submitted_on">2024-05-10 18:30:00</field>
+        <field name="complaint_ids" eval="[(0, 0, {
+            'description': 'Late pallet pickup from supplier.',
+            'severity': 'medium',
+            'action_taken': 'Expedited alternative transporter.',
+            'resolved': True,
+            'customer_id': ref('partner_customer_green'),
+            'date': '2024-05-10'
+        }), (0, 0, {
+            'description': 'Minor spill near loading bay.',
+            'severity': 'low',
+            'action_taken': 'Cleaned and logged safety note.',
+            'resolved': True,
+            'date': '2024-05-10'
+        })]"/>
+        <field name="staff_log_ids" eval="[(0, 0, {
+            'staff_id': ref('employee_jane_manager'),
+            'role': 'Shift Lead',
+            'shift': 'Morning',
+            'issue': 'Ensured cold-chain checks were completed.',
+            'attendance_flag': 'present'
+        }), (0, 0, {
+            'staff_id': ref('employee_luis_supervisor'),
+            'role': 'Support',
+            'shift': 'Evening',
+            'issue': 'Assisted with delivery backlog.',
+            'attendance_flag': 'late',
+            'note': 'Arrived 10 minutes late due to traffic.'
+        })]"/>
+        <field name="contractor_performance_ids" eval="[(0, 0, {
+            'contractor_id': ref('partner_contractor_polar'),
+            'rating': 4.5,
+            'comment': 'Handled rush delivery with proper temperature control.',
+            'reference_period': 'May 10'
+        })]"/>
+    </record>
+
+    <record id="daily_report_south" model="daily.manager.report">
+        <field name="date">2024-05-11</field>
+        <field name="company_id" ref="company_branch_south"/>
+        <field name="branch_id" ref="company_branch_south"/>
+        <field name="department_id" ref="department_operations_south"/>
+        <field name="manager_id" ref="base.user_admin"/>
+        <field name="activities"><![CDATA[<p>Completed outbound shipments and audited packaging lines.</p>]]></field>
+        <field name="notes">Monitor supplier quality scores next week.</field>
+        <field name="state">draft</field>
+        <field name="complaint_ids" eval="[(0, 0, {
+            'description': 'Packaging variance detected for export batch.',
+            'severity': 'high',
+            'action_taken': 'Isolated batch and scheduled rework.',
+            'resolved': False,
+            'customer_id': ref('partner_customer_blue'),
+            'date': '2024-05-11'
+        })]"/>
+        <field name="staff_log_ids" eval="[(0, 0, {
+            'staff_id': ref('employee_luis_supervisor'),
+            'role': 'Supervisor',
+            'shift': 'Night',
+            'issue': 'Conducted extra QA checks.',
+            'attendance_flag': 'present'
+        })]"/>
+        <field name="contractor_performance_ids" eval="[(0, 0, {
+            'contractor_id': ref('partner_contractor_solar'),
+            'rating': 3.8,
+            'comment': 'Delivery on time but documentation incomplete.',
+            'reference_period': 'May 11'
+        })]"/>
+    </record>
+</odoo>

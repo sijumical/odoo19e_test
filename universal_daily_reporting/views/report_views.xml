@@ -1,0 +1,240 @@
+<odoo>
+    <record id="view_daily_manager_report_tree" model="ir.ui.view">
+        <field name="name">daily.manager.report.tree</field>
+        <field name="model">daily.manager.report</field>
+                <field name="arch" type="xml">
+                    <list string="Daily Manager Reports">
+                        <field name="date"/>
+                        <field name="company_id"/>
+                        <field name="branch_id"/>
+                        <field name="department_id"/>
+                        <field name="manager_id"/>
+                        <field name="state"/>
+                        <field name="submitted_on"/>
+                    </list>
+                </field>
+    </record>
+
+    <record id="view_daily_manager_report_form" model="ir.ui.view">
+        <field name="name">daily.manager.report.form</field>
+        <field name="model">daily.manager.report</field>
+        <field name="arch" type="xml">
+            <form string="Daily Manager Report" create="true" edit="true">
+                <header>
+                    <button name="action_submit" type="object" string="Submit" states="draft" class="btn-primary"
+                            groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+                    <button name="action_reopen" type="object" string="Reopen" states="submitted"
+                            groups="universal_daily_reporting.group_reporting_admin"/>
+                    <button name="action_send_email" type="object" string="Send via Email"
+                            groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+                    <button name="action_send_whatsapp" type="object" string="Send via WhatsApp"
+                            groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="company_id"/>
+                            <field name="branch_id"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group>
+                            <field name="manager_id"/>
+                            <field name="submitted_on" readonly="1"/>
+                            <field name="submitted_by" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Activities">
+                            <field name="activities" nolabel="1" help="Part of SP Nexgen Automind’s Universal Reporting System."/>
+                        </page>
+                        <page string="Complaints">
+                            <field name="complaint_ids">
+                                <list string="Complaints" editable="bottom">
+                                    <field name="description"/>
+                                    <field name="customer_id"/>
+                                    <field name="severity"/>
+                                    <field name="responsible_id"/>
+                                    <field name="resolved"/>
+                                    <field name="date"/>
+                                    <field name="reference"/>
+                                </list>
+                                <form string="Complaint">
+                                    <group>
+                                        <field name="description"/>
+                                        <field name="customer_id"/>
+                                        <field name="severity"/>
+                                        <field name="responsible_id"/>
+                                        <field name="resolved"/>
+                                        <field name="date"/>
+                                        <field name="reference"/>
+                                        <field name="action_taken"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Staff Logs">
+                            <field name="staff_log_ids">
+                                <list string="Staff Logs" editable="bottom">
+                                    <field name="staff_id"/>
+                                    <field name="role"/>
+                                    <field name="shift"/>
+                                    <field name="attendance_flag"/>
+                                    <field name="issue"/>
+                                    <field name="action"/>
+                                    <field name="note"/>
+                                </list>
+                                <form string="Staff Log">
+                                    <group>
+                                        <field name="staff_id"/>
+                                        <field name="role"/>
+                                        <field name="shift"/>
+                                        <field name="attendance_flag"/>
+                                    </group>
+                                    <group>
+                                        <field name="issue"/>
+                                        <field name="action"/>
+                                        <field name="note"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Contractor Performance">
+                            <field name="contractor_performance_ids">
+                                <list string="Contractor Performance" editable="bottom">
+                                    <field name="contractor_id"/>
+                                    <field name="rating" widget="float_time"/>
+                                    <field name="comment"/>
+                                    <field name="follow_up_action"/>
+                                    <field name="reference_period"/>
+                                    <field name="active"/>
+                                </list>
+                                <form string="Contractor Performance">
+                                    <group>
+                                        <field name="contractor_id"/>
+                                        <field name="rating"/>
+                                        <field name="reference_period"/>
+                                        <field name="active"/>
+                                    </group>
+                                    <group>
+                                        <field name="comment"/>
+                                        <field name="follow_up_action"/>
+                                        <field name="attachment_ids" widget="many2many_binary"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="KPI Metrics">
+                            <field name="metric_line_ids" context="{'default_name': False}">
+                                <list string="Metrics" editable="bottom" default_order="sequence">
+                                    <field name="name"/>
+                                    <field name="metric_type" readonly="1"/>
+                                    <field name="int_value" attrs="{'invisible': [('metric_type', '!=', 'int')]}"/>
+                                    <field name="float_value" attrs="{'invisible': [('metric_type', '!=', 'float')]}"/>
+                                    <field name="text_value" attrs="{'invisible': [('metric_type', '!=', 'text')]}"/>
+                                    <field name="selection_value" attrs="{'invisible': [('metric_type', '!=', 'selection')]}"/>
+                                    <field name="sequence" widget="handle"/>
+                                </list>
+                                <form string="Metric Line">
+                                    <group>
+                                        <field name="name"/>
+                                        <field name="metric_type" readonly="1"/>
+                                        <field name="int_value" attrs="{'invisible': [('metric_type', '!=', 'int')]}"/>
+                                        <field name="float_value" attrs="{'invisible': [('metric_type', '!=', 'float')]}"/>
+                                        <field name="text_value" attrs="{'invisible': [('metric_type', '!=', 'text')]}"/>
+                                        <field name="selection_value" attrs="{'invisible': [('metric_type', '!=', 'selection')]}"/>
+                                        <field name="sequence"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Dynamic Sections">
+                            <field name="dynamic_section_ids">
+                                <list string="Dynamic Sections" editable="bottom" default_order="sequence">
+                                    <field name="title"/>
+                                    <field name="template_id"/>
+                                    <field name="subject"/>
+                                    <field name="employee_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="sequence" widget="handle"/>
+                                </list>
+                                <form string="Dynamic Section">
+                                    <group>
+                                        <field name="template_id"/>
+                                        <field name="title"/>
+                                        <field name="subject"/>
+                                    </group>
+                                    <group>
+                                        <field name="employee_id"/>
+                                        <field name="partner_id"/>
+                                        <field name="sequence"/>
+                                    </group>
+                                    <field name="description" nolabel="1"/>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                        <page string="About This Module">
+                            <group>
+                                <label string="Developed by: SP Nexgen Automind Pvt Ltd"/>
+                                <label string="Division: Tech Paras (Odoo ERP &amp; Integrations)"/>
+                                <label string="Marketing: Rank Rocket – AI-First Marketing"/>
+                                <label string="Website: www.smarterpeak.com"/>
+                                <label string="Slogan: Automate Excellence"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_daily_manager_report_search" model="ir.ui.view">
+        <field name="name">daily.manager.report.search</field>
+        <field name="model">daily.manager.report</field>
+                <field name="arch" type="xml">
+                    <search string="Daily Reports">
+                        <field name="date"/>
+                        <field name="manager_id"/>
+                        <field name="company_id"/>
+                        <field name="branch_id"/>
+                        <field name="department_id"/>
+                        <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                        <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                        <filter string="My Company" name="my_company" domain="[('company_id', 'in', company_ids)]" context="{'group_by': 'company_id'}"/>
+                        <filter string="Group by Branch" name="group_branch" context="{'group_by': 'branch_id'}"/>
+                        <filter string="Group by Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                        <filter string="Group by Manager" name="group_manager" context="{'group_by': 'manager_id'}"/>
+                        <group expand="0" string="Group By">
+                            <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                            <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                        </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_daily_manager_reports" model="ir.actions.act_window">
+        <field name="name">Daily Reports</field>
+        <field name="res_model">daily.manager.report</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_daily_manager_report_search"/>
+        <field name="context">{
+            'default_company_id': uid.company_id,
+            'default_branch_id': uid.company_id,
+            'search_default_my_company': 1
+        }</field>
+    </record>
+
+    <menuitem id="menu_daily_reporting_root" name="Daily Reporting" sequence="10"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+    <menuitem id="menu_daily_reports" name="Daily Reports" parent="menu_daily_reporting_root" action="action_daily_manager_reports"
+              sequence="10" groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+</odoo>

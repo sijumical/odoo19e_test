@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="group_daily_reporting_admin" model="res.groups">
+            <field name="name">Reporting Admin</field>
+            <field name="category_id" ref="base.module_category_administration"/>
+        </record>
+
+        <record id="group_daily_reporting_branch_manager" model="res.groups">
+            <field name="name">Branch Manager</field>
+            <field name="category_id" ref="base.module_category_administration"/>
+        </record>
+
+        <record id="rule_daily_report_admin_all" model="ir.rule">
+            <field name="name">Daily Report Admin Access</field>
+            <field name="model_id" ref="model_daily_manager_report"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_daily_report_branch_read" model="ir.rule">
+            <field name="name">Daily Report Branch Access</field>
+            <field name="model_id" ref="model_daily_manager_report"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_branch_manager'))]"/>
+            <field name="domain_force">['&amp;', ('company_id', 'in', user.company_ids.ids), '|', ('branch_id', '=', False), ('branch_id', 'in', user.company_ids.ids), '|', ('department_id', '=', False), ('department_id', 'in', user.employee_ids.department_id.ids)]</field>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_daily_report_branch_edit_draft" model="ir.rule">
+            <field name="name">Daily Report Branch Edit Draft</field>
+            <field name="model_id" ref="model_daily_manager_report"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_branch_manager'))]"/>
+            <field name="domain_force">['&amp;', ('state', '=', 'draft'), ('company_id', 'in', user.company_ids.ids), '|', ('branch_id', '=', False), ('branch_id', 'in', user.company_ids.ids), '|', ('department_id', '=', False), ('department_id', 'in', user.employee_ids.department_id.ids)]</field>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="rule_daily_report_line_admin_all" model="ir.rule">
+            <field name="name">Daily Report Lines Admin Access</field>
+            <field name="model_id" ref="model_daily_manager_report_complaint"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_daily_report_line_staff_admin_all" model="ir.rule">
+            <field name="name">Staff Logs Admin Access</field>
+            <field name="model_id" ref="model_daily_manager_report_staff_log"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_daily_report_line_contractor_admin_all" model="ir.rule">
+            <field name="name">Contractor Performance Admin Access</field>
+            <field name="model_id" ref="model_daily_manager_report_contractor_performance"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_daily_report_line_metric_admin_all" model="ir.rule">
+            <field name="name">Metric Line Admin Access</field>
+            <field name="model_id" ref="model_daily_manager_report_metric_line"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_daily_report_template_admin_all" model="ir.rule">
+            <field name="name">Metric Template Admin Access</field>
+            <field name="model_id" ref="model_daily_manager_metric_template"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_daily_report_line_branch" model="ir.rule">
+            <field name="name">Complaints Branch Access</field>
+            <field name="model_id" ref="model_daily_manager_report_complaint"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_branch_manager'))]"/>
+            <field name="domain_force">['&amp;', ('company_id', 'in', user.company_ids.ids), '|', ('branch_id', '=', False), ('branch_id', 'in', user.company_ids.ids), '|', ('department_id', '=', False), ('department_id', 'in', user.employee_ids.department_id.ids)]</field>
+        </record>
+
+        <record id="rule_daily_report_line_staff_branch" model="ir.rule">
+            <field name="name">Staff Logs Branch Access</field>
+            <field name="model_id" ref="model_daily_manager_report_staff_log"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_branch_manager'))]"/>
+            <field name="domain_force">['&amp;', ('company_id', 'in', user.company_ids.ids), '|', ('branch_id', '=', False), ('branch_id', 'in', user.company_ids.ids), '|', ('department_id', '=', False), ('department_id', 'in', user.employee_ids.department_id.ids)]</field>
+        </record>
+
+        <record id="rule_daily_report_line_contractor_branch" model="ir.rule">
+            <field name="name">Contractor Performance Branch Access</field>
+            <field name="model_id" ref="model_daily_manager_report_contractor_performance"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_branch_manager'))]"/>
+            <field name="domain_force">['&amp;', ('company_id', 'in', user.company_ids.ids), '|', ('branch_id', '=', False), ('branch_id', 'in', user.company_ids.ids), '|', ('department_id', '=', False), ('department_id', 'in', user.employee_ids.department_id.ids)]</field>
+        </record>
+
+        <record id="rule_daily_report_line_metric_branch" model="ir.rule">
+            <field name="name">Metric Lines Branch Access</field>
+            <field name="model_id" ref="model_daily_manager_report_metric_line"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_branch_manager'))]"/>
+            <field name="domain_force">['&amp;', ('company_id', 'in', user.company_ids.ids), '|', ('branch_id', '=', False), ('branch_id', 'in', user.company_ids.ids), '|', ('department_id', '=', False), ('department_id', 'in', user.employee_ids.department_id.ids)]</field>
+        </record>
+
+        <record id="rule_daily_report_template_branch" model="ir.rule">
+            <field name="name">Metric Template Branch Access</field>
+            <field name="model_id" ref="model_daily_manager_metric_template"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_branch_manager'))]"/>
+            <field name="domain_force">['&amp;', ('company_id', 'in', user.company_ids.ids), '|', ('branch_id', '=', False), ('branch_id', 'in', user.company_ids.ids), '|', ('department_id', '=', False), ('department_id', 'in', user.employee_ids.department_id.ids)]</field>
+        </record>
+
+        <record id="rule_section_template_admin_all" model="ir.rule">
+            <field name="name">Section Template Admin Access</field>
+            <field name="model_id" ref="model_daily_manager_section_template"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_section_template_branch" model="ir.rule">
+            <field name="name">Section Template Branch Access</field>
+            <field name="model_id" ref="model_daily_manager_section_template"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_branch_manager'))]"/>
+            <field name="domain_force">['&amp;', ('company_id', 'in', user.company_ids.ids), '|', ('branch_id', '=', False), ('branch_id', 'in', user.company_ids.ids), '|', ('department_id', '=', False), ('department_id', 'in', user.employee_ids.department_id.ids)]</field>
+        </record>
+
+        <record id="rule_report_section_admin_all" model="ir.rule">
+            <field name="name">Report Section Admin Access</field>
+            <field name="model_id" ref="model_daily_manager_report_section"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_report_section_branch" model="ir.rule">
+            <field name="name">Report Section Branch Access</field>
+            <field name="model_id" ref="model_daily_manager_report_section"/>
+            <field name="groups" eval="[(4, ref('group_daily_reporting_branch_manager'))]"/>
+            <field name="domain_force">['&amp;', ('company_id', 'in', user.company_ids.ids), '|', ('branch_id', '=', False), ('branch_id', 'in', user.company_ids.ids), '|', ('department_id', '=', False), ('department_id', 'in', user.employee_ids.department_id.ids)]</field>
+        </record>
+    </data>
+</odoo>
