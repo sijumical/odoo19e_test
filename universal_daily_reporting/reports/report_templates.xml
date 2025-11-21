@@ -1,0 +1,240 @@
+<odoo>
+    <template id="report_daily_manager_document">
+        <t t-call="web.external_layout">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page" style="position: relative;">
+                    <div style="position:absolute; top:35%; left:10%; right:10%; text-align:center; opacity:0.12; font-size:60px; transform: rotate(-25deg); pointer-events:none;">Automate Excellence</div>
+                    <div class="o_row align-items-center mb-3" style="position:relative; z-index:1;">
+                        <div class="col-8">
+                            <h2>Daily Manager Report</h2>
+                            <div class="text-muted">SP Nexgen Automind Pvt Ltd — TECH PARAS (Odoo ERP &amp; Integrations) | RANK ROCKET (AI-First Marketing)</div>
+                            <div class="fw-bold">Company: <span t-esc="doc.company_id.name"/> | Branch: <span t-esc="doc.branch_id.name or ''"/></div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div style="border:1px dashed #ccc; padding:10px; display:inline-block;">Logo</div>
+                        </div>
+                    </div>
+                    <div class="o_row" style="position:relative; z-index:1;">
+                        <table class="table table-sm table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>Date</th>
+                                    <td><span t-esc="doc.date"/></td>
+                                    <th>State</th>
+                                    <td><span t-esc="doc.state"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Company</th>
+                                    <td><span t-esc="doc.company_id.name"/></td>
+                                    <th>Branch</th>
+                                    <td><span t-esc="doc.branch_id.name or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Department</th>
+                                    <td colspan="3"><span t-esc="doc.department_id.name or ''"/></td>
+                                </tr>
+                                <tr>
+                                    <th>Manager</th>
+                                    <td><span t-esc="doc.manager_id.name"/></td>
+                                    <th>Submitted On</th>
+                                    <td>
+                                        <span t-if="doc.submitted_on" t-esc="doc.submitted_on"/>
+                                        <span t-else="">Not submitted</span>
+                                    </td>
+                                </tr>
+                                <tr t-if="doc.submitted_by">
+                                    <th>Submitted By</th>
+                                    <td colspan="3"><span t-esc="doc.submitted_by.name"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="o_row" t-if="doc.dynamic_section_ids">
+                        <h3>Dynamic Sections</h3>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Subject</th>
+                                    <th>Employee</th>
+                                    <th>Partner</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.dynamic_section_ids" t-as="line">
+                                    <td><span t-esc="line.title or line.template_id.name"/></td>
+                                    <td><span t-esc="line.subject"/></td>
+                                    <td><span t-esc="line.employee_id.name or ''"/></td>
+                                    <td><span t-esc="line.partner_id.name or ''"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div t-foreach="doc.dynamic_section_ids" t-as="line" class="mb-2">
+                            <strong t-esc="line.title or line.template_id.name"/>: <span t-field="line.description"/>
+                        </div>
+                    </div>
+
+                    <div class="o_row" t-if="doc.activities">
+                        <h3>Activities</h3>
+                        <div t-field="doc.activities"/>
+                    </div>
+
+                    <div class="o_row" t-if="doc.complaint_ids">
+                        <h3>Complaints</h3>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Severity</th>
+                                    <th>Customer</th>
+                                    <th>Responsible</th>
+                                    <th>Resolved</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.complaint_ids" t-as="line">
+                                    <td><span t-esc="line.description"/></td>
+                                    <td><span t-esc="line.severity"/></td>
+                                    <td><span t-esc="line.customer_id.name or ''"/></td>
+                                    <td><span t-esc="line.responsible_id.name or ''"/></td>
+                                    <td><span t-esc="'Yes' if line.resolved else 'No'"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="o_row" t-if="doc.staff_log_ids">
+                        <h3>Staff Logs</h3>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Staff</th>
+                                    <th>Role</th>
+                                    <th>Shift</th>
+                                    <th>Attendance</th>
+                                    <th>Issue</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.staff_log_ids" t-as="line">
+                                    <td><span t-esc="line.staff_id.name or ''"/></td>
+                                    <td><span t-esc="line.role"/></td>
+                                    <td><span t-esc="line.shift"/></td>
+                                    <td><span t-esc="line.attendance_flag"/></td>
+                                    <td><span t-esc="line.issue"/></td>
+                                    <td><span t-esc="line.action"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="o_row" t-if="doc.contractor_performance_ids">
+                        <h3>Contractor Performance</h3>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Contractor</th>
+                                    <th>Rating</th>
+                                    <th>Comment</th>
+                                    <th>Follow Up</th>
+                                    <th>Reference Period</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.contractor_performance_ids" t-as="line">
+                                    <td><span t-esc="line.contractor_id.name or ''"/></td>
+                                    <td><span t-esc="line.rating"/></td>
+                                    <td><span t-esc="line.comment"/></td>
+                                    <td><span t-esc="line.follow_up_action"/></td>
+                                    <td><span t-esc="line.reference_period"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="o_row" t-if="doc.metric_line_ids">
+                        <h3>KPI Metrics</h3>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.metric_line_ids" t-as="line">
+                                    <td><span t-esc="line.name"/></td>
+                                    <td><span t-esc="line.metric_type"/></td>
+                                    <td>
+                                        <span t-if="line.metric_type == 'int'" t-esc="line.int_value"/>
+                                        <span t-elif="line.metric_type == 'float'" t-esc="line.float_value"/>
+                                        <span t-elif="line.metric_type == 'text'" t-esc="line.text_value"/>
+                                        <span t-else="" t-esc="line.selection_value"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="o_row" t-if="doc.notes">
+                        <h3>Notes</h3>
+                        <p><span t-esc="doc.notes"/></p>
+                    </div>
+                    <div class="o_row mt-3 text-center text-muted" style="position:relative; z-index:1;">
+                        <small>Generated via SP Nexgen Automind Pvt Ltd – Automate Excellence | www.smarterpeak.com</small>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_contractor_summary_document">
+        <t t-call="web.external_layout">
+            <t t-foreach="docs" t-as="doc">
+                <div class="page" style="position: relative;">
+                    <div style="position:absolute; top:35%; left:10%; right:10%; text-align:center; opacity:0.12; font-size:60px; transform: rotate(-25deg); pointer-events:none;">Automate Excellence</div>
+                    <div class="o_row align-items-center mb-3" style="position:relative; z-index:1;">
+                        <div class="col-8">
+                            <h2>Contractor Performance Summary</h2>
+                            <div class="text-muted">SP Nexgen Automind Pvt Ltd — TECH PARAS (Odoo ERP &amp; Integrations) | RANK ROCKET (AI-First Marketing)</div>
+                            <div class="fw-bold">Company: <span t-esc="doc.company_id.name"/> | Branch: <span t-esc="doc.branch_id.name or ''"/></div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div style="border:1px dashed #ccc; padding:10px; display:inline-block;">Logo</div>
+                        </div>
+                    </div>
+                    <p style="position:relative; z-index:1;">
+                        <strong>Report Date:</strong> <span t-esc="doc.date"/>
+                        <span class="ms-3"><strong>Branch:</strong> <span t-esc="doc.branch_id.name or doc.company_id.name"/></span>
+                        <span class="ms-3"><strong>Department:</strong> <span t-esc="doc.department_id.name or ''"/></span>
+                    </p>
+                    <table class="table table-sm table-bordered" t-if="doc.contractor_performance_ids">
+                        <thead>
+                            <tr>
+                                <th>Contractor</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                                <th>Follow Up</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="doc.contractor_performance_ids" t-as="line">
+                                <td><span t-esc="line.contractor_id.name or ''"/></td>
+                                <td><span t-esc="line.rating"/></td>
+                                <td><span t-esc="line.comment"/></td>
+                                <td><span t-esc="line.follow_up_action"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p t-if="not doc.contractor_performance_ids">No contractor performance records for this report.</p>
+                    <div class="o_row mt-3 text-center text-muted" style="position:relative; z-index:1;">
+                        <small>Generated via SP Nexgen Automind Pvt Ltd – Automate Excellence | www.smarterpeak.com</small>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

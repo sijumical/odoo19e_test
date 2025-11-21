@@ -1,0 +1,25 @@
+# -*- coding: utf-8 -*-
+{
+    "name": "Universal Daily Reporting & Performance",
+    "version": "1.0.0",
+    "summary": "SP Nexgen Automind | Universal daily reporting with KPIs, complaints, staff & contractor logs",
+    "description": "Automate Excellence with SP Nexgen Automind Pvt Ltd – TECH PARAS (Odoo ERP & Integrations) and RANK ROCKET (AI-First Marketing).",
+    "license": "OEEL-1",
+    "author": "SP Nexgen Automind Pvt Ltd",
+    "website": "www.smarterpeak.com",
+    "depends": ["base", "mail", "hr"],
+    "data": [
+        "security/reporting_security.xml",
+        "security/ir.model.access.csv",
+        "views/report_views.xml",
+        "views/metric_template_views.xml",
+        "views/section_template_views.xml",
+        "views/dashboard_views.xml",
+        "reports/report_templates.xml",
+        "reports/report_actions.xml",
+        "data/mail_templates.xml",
+    ],
+    "demo": ["data/demo.xml"],
+    "application": True,
+    "installable": True,
+}

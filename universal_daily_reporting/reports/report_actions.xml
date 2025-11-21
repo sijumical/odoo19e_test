@@ -1,0 +1,21 @@
+<odoo>
+    <report
+        id="report_daily_manager_pdf"
+        model="daily.manager.report"
+        string="Daily Manager Report"
+        report_type="qweb-pdf"
+        name="universal_daily_reporting.report_daily_manager_document"
+        file="universal_daily_reporting.report_daily_manager_document"
+        print_report_name="(object.date or 'daily_report') + '_report'"
+    />
+
+    <report
+        id="report_contractor_summary_pdf"
+        model="daily.manager.report"
+        string="Contractor Performance Summary"
+        report_type="qweb-pdf"
+        name="universal_daily_reporting.report_contractor_summary_document"
+        file="universal_daily_reporting.report_contractor_summary_document"
+        print_report_name="'contractor_summary_' + (object.date or 'report')"
+    />
+</odoo>

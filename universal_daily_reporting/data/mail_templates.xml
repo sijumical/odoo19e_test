@@ -1,0 +1,142 @@
+<odoo>
+    <record id="mail_template_daily_report_email" model="mail.template">
+        <field name="name">Daily Manager Report Email</field>
+        <field name="model_id" ref="model_daily_manager_report"/>
+        <field name="subject">Daily Manager Report - ${object.date or ''}</field>
+        <field name="email_from">${(object.company_id.email or object.company_id.partner_id.email) or ''}</field>
+        <field name="email_to">${object.manager_id.email or object.manager_id.partner_id.email or ''}</field>
+        <field name="recipient_ids" eval="[]"/>
+        <field name="report_template" ref="universal_daily_reporting.report_daily_manager"/>
+        <field name="report_name">daily_report_${(object.date or '')}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p><strong>Daily Report:</strong> ${object.date or ''}</p>
+                <p><strong>Company:</strong> ${object.company_id.name or ''}</p>
+                % if object.branch_id:
+                <p><strong>Branch:</strong> ${object.branch_id.name}</p>
+                % endif
+                % if object.department_id:
+                <p><strong>Department:</strong> ${object.department_id.name}</p>
+                % endif
+                <p><strong>Manager:</strong> ${object.manager_id.name or ''}</p>
+                <p><strong>State:</strong> ${dict(object._fields['state'].selection).get(object.state)}</p>
+                % if object.activities:
+                <p><strong>Activities:</strong><br/>${object.activities}</p>
+                % endif
+                % if object.complaint_ids:
+                <p><strong>Complaints:</strong></p>
+                <ul>
+                    % for comp in object.complaint_ids:
+                    <li>${comp.description or ''} — ${comp.severity or ''}</li>
+                    % endfor
+                </ul>
+                % endif
+                % if object.staff_log_ids:
+                <p><strong>Staff Logs:</strong></p>
+                <ul>
+                    % for log in object.staff_log_ids:
+                    <li>${log.staff_id.name or ''}: ${log.issue or ''}</li>
+                    % endfor
+                </ul>
+                % endif
+                % if object.contractor_performance_ids:
+                <p><strong>Contractor Performance:</strong></p>
+                <ul>
+                    % for perf in object.contractor_performance_ids:
+                    <li>${perf.contractor_id.name or ''}: ${perf.rating} - ${perf.comment or ''}</li>
+                    % endfor
+                </ul>
+                % endif
+                % if object.metric_line_ids:
+                <p><strong>Metrics:</strong></p>
+                <ul>
+                    % for line in object.metric_line_ids:
+                    <li>${line.name}: ${line.int_value or line.float_value or line.text_value or line.selection_value or ''}</li>
+                    % endfor
+                </ul>
+                % endif
+                % if object.dynamic_section_ids:
+                <p><strong>Dynamic Sections:</strong></p>
+                <ul>
+                    % for section in object.dynamic_section_ids:
+                    <li>
+                        ${section.title or ''}: ${section.subject or ''}
+                        % if section.description:
+                            - ${section.description}
+                        % endif
+                    </li>
+                    % endfor
+                </ul>
+                % endif
+                % if object.notes:
+                <p><strong>Notes:</strong><br/>${object.notes}</p>
+                % endif
+                <p style="color:#777; font-size:12px;">Generated via SP Nexgen Automind Pvt Ltd – Automate Excellence | www.smarterpeak.com</p>
+            </div>
+        </field>
+    </record>
+
+    <record id="mail_template_daily_report_whatsapp" model="mail.template">
+        <field name="name">Daily Manager Report WhatsApp</field>
+        <field name="model_id" ref="model_daily_manager_report"/>
+        <field name="subject">Daily Manager Report - ${object.date or ''}</field>
+        <field name="email_from">${(object.company_id.email or object.company_id.partner_id.email) or ''}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>*Daily Report* ${object.date or ''}</p>
+                <p>Company: ${object.company_id.name or ''}</p>
+                % if object.branch_id:
+                <p>Branch: ${object.branch_id.name}</p>
+                % endif
+                % if object.department_id:
+                <p>Department: ${object.department_id.name}</p>
+                % endif
+                <p>Manager: ${object.manager_id.name or ''}</p>
+                % if object.activities:
+                <p>Activities: ${object.activities}</p>
+                % endif
+                % if object.complaint_ids:
+                <p>Complaints:</p>
+                <ul>
+                    % for comp in object.complaint_ids:
+                    <li>${comp.description or ''} — ${comp.severity or ''}</li>
+                    % endfor
+                </ul>
+                % endif
+                % if object.contractor_performance_ids:
+                <p>Contractors:</p>
+                <ul>
+                    % for perf in object.contractor_performance_ids:
+                    <li>${perf.contractor_id.name or ''}: ${perf.rating} - ${perf.comment or ''}</li>
+                    % endfor
+                </ul>
+                % endif
+                % if object.metric_line_ids:
+                <p>Metrics:</p>
+                <ul>
+                    % for line in object.metric_line_ids:
+                    <li>${line.name}: ${line.int_value or line.float_value or line.text_value or line.selection_value or ''}</li>
+                    % endfor
+                </ul>
+                % endif
+                % if object.dynamic_section_ids:
+                <p>Dynamic Sections:</p>
+                <ul>
+                    % for section in object.dynamic_section_ids:
+                    <li>
+                        ${section.title or ''}: ${section.subject or ''}
+                        % if section.description:
+                            - ${section.description}
+                        % endif
+                    </li>
+                    % endfor
+                </ul>
+                % endif
+                % if object.notes:
+                <p>Notes: ${object.notes}</p>
+                % endif
+                <p style="color:#777; font-size:12px;">Generated via SP Nexgen Automind Pvt Ltd – Automate Excellence | www.smarterpeak.com</p>
+            </div>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,92 @@
+<odoo>
+    <record id="view_metric_template_tree" model="ir.ui.view">
+        <field name="name">daily.manager.metric.template.tree</field>
+        <field name="model">daily.manager.metric.template</field>
+        <field name="arch" type="xml">
+            <list string="KPI Metric Templates" default_order="sequence">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="metric_type"/>
+                <field name="company_id"/>
+                <field name="branch_id"/>
+                <field name="department_id"/>
+                <field name="required"/>
+                <field name="sequence" widget="handle"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_metric_template_form" model="ir.ui.view">
+        <field name="name">daily.manager.metric.template.form</field>
+        <field name="model">daily.manager.metric.template</field>
+        <field name="arch" type="xml">
+            <form string="KPI Metric Template">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="metric_type"/>
+                            <field name="required"/>
+                            <field name="active"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="company_id" options="{'no_create': True}"/>
+                            <field name="branch_id" options="{'no_create': True}"/>
+                            <field name="department_id" options="{'no_create': True}"/>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                    <group string="Defaults" col="2">
+                        <field name="default_int_value" attrs="{'invisible': [('metric_type', '!=', 'int')]}"/>
+                        <field name="default_float_value" attrs="{'invisible': [('metric_type', '!=', 'float')]}"/>
+                        <field name="default_text_value" attrs="{'invisible': [('metric_type', '!=', 'text')]}"/>
+                        <field name="default_selection_value" attrs="{'invisible': [('metric_type', '!=', 'selection')]}"/>
+                    </group>
+                    <group string="Selection Options" attrs="{'invisible': [('metric_type', '!=', 'selection')]}" colspan="4">
+                        <field name="selection_options" nolabel="1" placeholder="One value per line or JSON mapping for labels"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_metric_template_search" model="ir.ui.view">
+        <field name="name">daily.manager.metric.template.search</field>
+        <field name="model">daily.manager.metric.template</field>
+        <field name="arch" type="xml">
+            <search string="Metric Templates">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="metric_type"/>
+                <field name="company_id"/>
+                <field name="branch_id"/>
+                <field name="department_id"/>
+                <filter name="filter_active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="group_company" string="Company" context="{'group_by': 'company_id'}"/>
+                <filter name="group_branch" string="Branch" context="{'group_by': 'branch_id'}"/>
+                <filter name="group_department" string="Department" context="{'group_by': 'department_id'}"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_type" string="Type" context="{'group_by': 'metric_type'}"/>
+                    <filter name="group_required" string="Required" context="{'group_by': 'required'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_metric_templates" model="ir.actions.act_window">
+        <field name="name">KPI Metrics</field>
+        <field name="res_model">daily.manager.metric.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_metric_template_search"/>
+        <field name="context">{'default_company_id': uid.company_id, 'default_branch_id': uid.company_id}</field>
+    </record>
+
+    <menuitem id="menu_daily_reporting_configuration" name="Configuration" parent="menu_daily_reporting_root" sequence="30"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+    <menuitem id="menu_metric_templates" name="KPI Metrics" parent="menu_daily_reporting_configuration" sequence="10"
+              action="action_metric_templates"
+              groups="universal_daily_reporting.group_reporting_admin,universal_daily_reporting.group_branch_manager"/>
+</odoo>
